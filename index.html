@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vitess Migration Animation</title>
+  <style>
+    /* Basic positioning (you'll likely want your own layout/design) */
+    .container {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 2rem 0;
+    }
+    .component {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+      opacity: 0; /* start hidden */
+    }
+    .hidden {
+      display: none;
+    }
+    svg {
+      width: 100%;
+      height: 200px;
+      border: 1px solid #eee;
+    }
+    /* Example line style for connectors */
+    .connector {
+      stroke: #2c3e50;
+      stroke-width: 2px;
+      fill: none;
+      stroke-dasharray: 8 8;
+      stroke-dashoffset: 8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="app" class="component">Application</div>
+  <div id="rds" class="component">RDS MySQL</div>
+</div>
+
+<div class="container" id="vitessCluster">
+  <div id="vtgate" class="component">vtgate</div>
+  
+  <div id="keyspace1" class="component">
+    <strong>Keyspace (Shard 1)</strong><br/>
+    Primary<br/>
+    Replica1, Replica2
+  </div>
+  
+  <div id="keyspace2" class="component">
+    <strong>Keyspace (Shard 2)</strong><br/>
+    Primary<br/>
+    Replica1, Replica2
+  </div>
+  
+  <div id="externalKeyspace" class="component">
+    <strong>External Keyspace</strong><br/>
+    (Points to RDS)
+  </div>
+</div>
+
+<!-- Visual Aids -->
+<div class="container">
+  <div id="routingRules" class="component">Routing Rules Table</div>
+  <div id="deniedTables" class="component">Denied Tables List</div>
+</div>
+
+<!-- Example SVG for connectors/arrows -->
+<svg>
+  <!-- Example: line from App to RDS -->
+  <line id="connectorAppRDS" class="connector" x1="100" y1="100" x2="300" y2="100" />
+  <!-- Add more lines/arrows as needed, or use <path> for curved arrows. -->
+</svg>
+
+<!-- Step Control Buttons (Optional) -->
+<div style="text-align:center; margin-top:2rem;">
+  <button onclick="goToStep(1)">Step 1</button>
+  <button onclick="goToStep(2)">Step 2</button>
+  <button onclick="goToStep(3)">Step 3</button>
+  <button onclick="goToStep(4)">Step 4</button>
+  <button onclick="goToStep(5)">Step 5</button>
+  <button onclick="goToStep(6)">Step 6</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="animation.js"></script>
+</body>
+</html>
+
