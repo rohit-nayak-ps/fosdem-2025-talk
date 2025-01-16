@@ -1,106 +1,69 @@
-// animation.js
+// Create a master timeline, paused so we can control it via step buttons.
+const tl = gsap.timeline({ defaults: { duration: 1 }, paused: true });
 
-// Create a master timeline. Paused so we can manually control it.
-const tl = gsap.timeline({
-  defaults: { duration: 1, ease: "power2.inOut" },
-  paused: true
-});
-
-/**
- * STEP 1: Current System - App <--> RDS
- * - Reveal the App and RDS
- * - Animate the connector line between them
- */
+// STEP 1: Current System - App <--> RDS
 tl.addLabel("step1")
-  .to("#app", { autoAlpha: 1, x: 0 }, "step1")
-  .to("#rds", { autoAlpha: 1, x: 0 }, "<")
-  .to("#connectorAppRDS", { strokeDashoffset: 0 }, "<");
+    .to("#app", { autoAlpha: 1, x: 0 }, "step1")
+    .to("#rds", { autoAlpha: 1, x: 0 }, "<")
+    // Animate the App <-> RDS arrow
+    .to("#arrowAppRDS", { autoAlpha: 1, strokeDashoffset: 0 }, "<");
 
-/**
- * STEP 2: Add Vitess Cluster
- * - Reveal Vitess cluster components (vtgate, shards)
- * - Show external keyspace
- */
+// STEP 2: Add Vitess Cluster
+// Show the cluster & External Keyspace arrow from RDS -> External
 tl.addLabel("step2")
-  // fade in Vitess cluster container or each component individually
-  .to("#vitessCluster .component", { autoAlpha: 1, stagger: 0.2 }, "step2");
+    .to("#vitessCluster .component", { autoAlpha: 1, stagger: 0.2 }, "step2")
+    // Show arrow from RDS to the external keyspace (for example)
+    .to("#arrowRDSExternal", { autoAlpha: 1, strokeDashoffset: 0 }, "<");
 
-/**
- * STEP 3: Start MoveTables Workflow
- * - Animate “data pulling” from RDS into Vitess Keyspace (illustrative arrow or highlight)
- * - Show Routing Rules and Denied Tables
- */
+// STEP 3: Start MoveTables Workflow
+// Show data pulling from RDS -> Keyspace, show routing rules & denied tables
 tl.addLabel("step3")
-  .to("#routingRules", { autoAlpha: 1 }, "step3")
-  .to("#deniedTables", { autoAlpha: 1 }, "<")
-  // Example “pulsing” effect to show data movement
-  .fromTo(
-    "#connectorAppRDS",
-    { strokeDasharray: "8 8", strokeDashoffset: 0 },
-    { strokeDashoffset: 16, repeat: 3, yoyo: true, duration: 0.5 },
-    "<"
-  );
+    .to("#routingRules", { autoAlpha: 1 }, "step3")
+    .to("#deniedTables", { autoAlpha: 1 }, "<")
+    // Animate an arrow from RDS -> Keyspace to simulate data pulling
+    .to("#arrowRDSKeyspace", { autoAlpha: 1, strokeDashoffset: 0 }, "<")
+    // Optional: pulse the arrow to emphasize data flow
+    .fromTo(
+        "#arrowRDSKeyspace",
+        { strokeDasharray: "6 6", strokeDashoffset: 0 },
+        { strokeDashoffset: 12, repeat: 3, yoyo: true, duration: 0.5 },
+        "<"
+    );
 
-/**
- * STEP 4: Point App to Vitess
- * - Shift the App’s connection from RDS to vtgate
- * - Possibly hide or de-emphasize the direct RDS connector
- */
+// STEP 4: Point App to Vitess (App -> vtgate, route back to RDS under the hood)
 tl.addLabel("step4")
-  // Example: fade out old connector, fade in a new connector line for App->vtgate
-  .to("#connectorAppRDS", { autoAlpha: 0 }, "step4")
-  .call(() => {
-    // If you have a new line element for App->vtgate, fade it in
-    gsap.to("#connectorAppVtgate", { autoAlpha: 1, strokeDashoffset: 0 });
-  });
+    // Hide the old arrow if you like (App <-> RDS)
+    .to("#arrowAppRDS", { autoAlpha: 0 }, "step4")
+    // Show new arrow from App -> vtgate
+    .to("#arrowAppVtgate", { autoAlpha: 1, strokeDashoffset: 0 }, "<");
 
-/**
- * STEP 5: Switch Replica Reads
- * - Reads come from Vitess, writes still go to RDS
- * - Update routing rules
- */
+// STEP 5: Switch Replica Reads (Reads -> Vitess, Writes -> RDS)
+// Possibly highlight routing rules changes
 tl.addLabel("step5")
-  // Possibly highlight or animate routing rules changes
-  .to("#routingRules", { scale: 1.1, repeat: 1, yoyo: true, duration: 0.5 }, "step5")
-  // Animate connectors or text to visually show read from Vitess, write to RDS
-  .call(() => {
-    // You can show an arrow or text label: "Replica Reads => Vitess"
-    console.log("Switched replica reads to Vitess");
-  });
+    .to("#routingRules", { scale: 1.1, repeat: 1, yoyo: true, duration: 0.5 }, "step5")
+    // Show an arrow from vtgate -> Keyspace to represent read traffic
+    .to("#arrowVtgateKeyspace", { autoAlpha: 1, strokeDashoffset: 0 }, "<")
+    .call(() => {
+      console.log("Reads now route to Vitess, writes still go to RDS");
+    });
 
-/**
- * STEP 6: Switch Writes
- * - All data to Vitess
- * - Denied Tables on Source
- * - Show Reverse Replication
- */
+// STEP 6: Switch Writes to Vitess
+// Show reverse replication, or highlight that everything is now in Vitess
 tl.addLabel("step6")
-  .call(() => {
-    // Possibly fade out RDS or mark it as secondary
-    gsap.to("#rds", { opacity: 0.5 });
-  })
-  .call(() => {
-    // Show or highlight reverse replication arrow back to RDS if needed
-    gsap.to("#reverseReplicationArrow", { autoAlpha: 1, strokeDashoffset: 0 });
-  }, "<");
+    .call(() => {
+      // Fade out RDS to show it's no longer primary
+      gsap.to("#rds", { opacity: 0.4 });
+    })
+    // Show arrow for reverse replication (Keyspace -> RDS)
+    .to("#arrowReverseReplication", { autoAlpha: 1, strokeDashoffset: 0 }, "<")
+    .call(() => {
+      console.log("All writes go to Vitess; Reverse replication keeps RDS in sync if needed.");
+    });
 
-/**
- * A helper function to jump to labeled steps in the timeline.
- */
+// A helper function to jump to labeled steps in the timeline.
 function goToStep(step) {
   tl.tweenTo(`step${step}`);
 }
 
-// Expose goToStep to global scope so HTML buttons can access it
+// Expose goToStep to global scope
 window.goToStep = goToStep;
-
-let currentStep = 1;
-function nextStep() {
-  currentStep++;
-  tl.tweenTo(`step${currentStep}`);
-}
-function prevStep() {
-  currentStep--;
-  tl.tweenTo(`step${currentStep}`);
-}
-
