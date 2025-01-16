@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vitess Migration Animation</title>
+  <title>Vitess Migration with Icons</title>
+  <!-- Font Awesome for Icons -->
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-..."
+          crossorigin="anonymous"
+  />
   <style>
-    /* Basic positioning (you'll likely want your own layout/design) */
     .container {
       display: flex;
       justify-content: space-evenly;
@@ -16,16 +22,17 @@
       border-radius: 6px;
       text-align: center;
       opacity: 0; /* start hidden */
+      width: 120px;
     }
-    .hidden {
-      display: none;
+    .icon {
+      font-size: 36px;
+      margin-bottom: 0.5rem;
     }
     svg {
       width: 100%;
       height: 200px;
       border: 1px solid #eee;
     }
-    /* Example line style for connectors */
     .connector {
       stroke: #2c3e50;
       stroke-width: 2px;
@@ -38,45 +45,56 @@
 <body>
 
 <div class="container">
-  <div id="app" class="component">Application</div>
-  <div id="rds" class="component">RDS MySQL</div>
+  <div id="app" class="component">
+    <i class="fa-solid fa-mobile-button icon"></i>
+    <p>Application</p>
+  </div>
+  <div id="rds" class="component">
+    <i class="fa-solid fa-database icon"></i>
+    <p>RDS MySQL</p>
+  </div>
 </div>
 
 <div class="container" id="vitessCluster">
-  <div id="vtgate" class="component">vtgate</div>
-  
+  <div id="vtgate" class="component">
+    <i class="fa-solid fa-network-wired icon"></i>
+    <p>vtgate</p>
+  </div>
+
   <div id="keyspace1" class="component">
-    <strong>Keyspace (Shard 1)</strong><br/>
-    Primary<br/>
-    Replica1, Replica2
+    <i class="fa-solid fa-server icon"></i>
+    <p>Keyspace (Shard 1)</p>
+    <p>Primary<br/>Replica1, Replica2</p>
   </div>
-  
+
   <div id="keyspace2" class="component">
-    <strong>Keyspace (Shard 2)</strong><br/>
-    Primary<br/>
-    Replica1, Replica2
+    <i class="fa-solid fa-server icon"></i>
+    <p>Keyspace (Shard 2)</p>
+    <p>Primary<br/>Replica1, Replica2</p>
   </div>
-  
+
   <div id="externalKeyspace" class="component">
-    <strong>External Keyspace</strong><br/>
-    (Points to RDS)
+    <i class="fa-solid fa-cloud icon"></i>
+    <p>External Keyspace</p>
+    <p>Points to RDS</p>
   </div>
 </div>
 
-<!-- Visual Aids -->
 <div class="container">
-  <div id="routingRules" class="component">Routing Rules Table</div>
-  <div id="deniedTables" class="component">Denied Tables List</div>
+  <div id="routingRules" class="component">
+    <i class="fa-solid fa-route icon"></i>
+    <p>Routing Rules</p>
+  </div>
+  <div id="deniedTables" class="component">
+    <i class="fa-solid fa-ban icon"></i>
+    <p>Denied Tables</p>
+  </div>
 </div>
 
-<!-- Example SVG for connectors/arrows -->
 <svg>
-  <!-- Example: line from App to RDS -->
   <line id="connectorAppRDS" class="connector" x1="100" y1="100" x2="300" y2="100" />
-  <!-- Add more lines/arrows as needed, or use <path> for curved arrows. -->
 </svg>
 
-<!-- Step Control Buttons (Optional) -->
 <div style="text-align:center; margin-top:2rem;">
   <button onclick="goToStep(1)">Step 1</button>
   <button onclick="goToStep(2)">Step 2</button>
@@ -91,4 +109,3 @@
 <script src="animation.js"></script>
 </body>
 </html>
-
