@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vitess Migration</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+            rel="stylesheet"
+            href="css/styles.css"
+    />
+</head>
+<body>
+
+<div class="step-buttons">
+    <button class="step-btn" data-step="0">Step 0</button>
+    <button class="step-btn" data-step="1">Step 1</button>
+    <button class="step-btn" data-step="2">Step 2</button>
+    <button class="step-btn" data-step="3">Step 3</button>
+    <button class="step-btn" data-step="4">Step 4</button>
+</div>
+
+
+
+<!-- Step 0 Content -->
+<div id="step-0" class="step-block active-step" data-step="0">
+    <div class="diagram-container">
+        <!-- Block: User Application -->
+        <div class="block user-app">
+            <i class="fas fa-user fa-2x"></i>
+            <p>User Application</p>
+        </div>
+
+        <!-- Block: RDS Cluster -->
+        <div class="block rds-cluster">
+            <i class="fas fa-database fa-2x"></i>
+            <p>RDS Cluster</p>
+        </div>
+
+        <!-- SVG to house the arrow -->
+        <svg class="arrow-line">
+            <defs>
+                <!-- Arrow marker (both ends) -->
+                <marker
+                        id="arrow"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="6"
+                        refY="3"
+                        orient="auto">
+                    <path d="M0,0 L0,6 L6,3 z" fill="black"></path>
+                </marker>
+                <marker
+                        id="arrow-reversed"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="0"
+                        refY="3"
+                        orient="auto"
+                >
+                    <!-- This path is essentially the horizontal mirror of the default right-pointing arrow -->
+                    <!-- The tip is at (0,3), i.e. left edge, making the arrow point left -->
+                    <path d="M6,0 L6,6 L0,3 z" fill="black" />
+                </marker>
+            </defs>
+
+            <!-- The line we will programmatically position & animate.
+                 Give it an ID so we can manipulate it in JS. -->
+            <line
+                    id="dynamic-arrow"
+                    stroke="black"
+                    stroke-width="2"
+                    marker-start="url(#arrow-reversed)"
+                    marker-end="url(#arrow)"
+                    stroke-dasharray="10"
+                    stroke-dashoffset="10"
+            />
+        </svg>
+    </div>
+</div>
+<!-- Step 1 Content (initially hidden) -->
+<div id="step-1" class="step-block" data-step="1">
+    <div class="block user-app">
+        <i class="fas fa-user fa-2x"></i>
+        <p>Vitess Cluster</p>
+    </div>
+</div>
+
+<!-- Step 2 Content (initially hidden) -->
+<div id="step-2" class="step-block" data-step="2">
+    <!-- You will add your Step 2 animated elements here -->
+</div>
+
+<!-- Step 3 Content (initially hidden) -->
+<div id="step-3" class="step-block" data-step="3">
+    <!-- You will add your Step 3 animated elements here -->
+</div>
+
+<!-- Step 4 Content (initially hidden) -->
+<div id="step-4" class="step-block" data-step="4">
+    <!-- You will add your Step 4 animated elements here -->
+</div>
+
+<script>
+    // Attach event listeners to each button
+    document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const chosenStep = parseInt(btn.getAttribute('data-step'));
+
+            // For each step-block, check its data-step
+            document.querySelectorAll('.step-block').forEach(block => {
+                const blockStep = parseInt(block.getAttribute('data-step'));
+
+                if (blockStep <= chosenStep) {
+                    // Show (accumulate) all steps up to and including chosenStep
+                    block.classList.add('show');
+                } else {
+                    // Hide steps beyond the chosen one
+                    block.classList.remove('show');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+
+    function positionAndAnimateArrow() {
+        const container = document.querySelector('.diagram-container');
+        const userApp   = document.querySelector('.user-app');
+        const rds       = document.querySelector('.rds-cluster');
+        const arrowLine = document.getElementById('dynamic-arrow');
+
+        // Get bounding rects for container and each block
+        const containerRect = container.getBoundingClientRect();
+        const userRect      = userApp.getBoundingClientRect();
+        const rdsRect       = rds.getBoundingClientRect();
+
+        // Calculate arrow start (right-center of user block)
+        const x1 = (userRect.right - containerRect.left);
+        const y1 = ( (userRect.top + userRect.bottom) / 2 ) - containerRect.top;
+
+        // Calculate arrow end (left-center of RDS block)
+        const x2 = (rdsRect.left - containerRect.left);
+        const y2 = ( (rdsRect.top + rdsRect.bottom) / 2 ) - containerRect.top;
+
+        // Update the line coordinates
+        arrowLine.setAttribute('x1', x1);
+        arrowLine.setAttribute('y1', y1);
+        arrowLine.setAttribute('x2', x2);
+        arrowLine.setAttribute('y2', y2);
+
+        // Now animate the arrow "draw" with GSAP
+        // The length we used in stroke-dasharray and stroke-dashoffset is "200"
+        // If you have a longer line, you can adjust the dasharray offset or measure the path length
+        gsap.fromTo(
+            arrowLine,
+            { strokeDashoffset: 100 },
+            {
+                strokeDashoffset: 10,
+                duration: 1,        // adjust as needed
+                ease: 'power1.inOut',
+                repeat: -1,         // infinite repeats
+                yoyo: true          // reverses each time
+            }
+        );
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        // Basic step-switching logic from before
+        document.querySelectorAll('.step-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetStep = btn.getAttribute('data-step');
+                document.querySelectorAll('.step-content').forEach(step => {
+                    step.classList.remove('active-step');
+                });
+                const newStepContent = document.getElementById(`step-${targetStep}`);
+                newStepContent.classList.add('active-step');
+
+                // If the user just clicked Step 0, run the arrow-draw animation
+                if (targetStep === '0') {
+                    positionAndAnimateArrow();
+                }
+            });
+        });
+
+        // Also run arrow positioning/animation on initial load (Step 0)
+        positionAndAnimateArrow();
+
+    });
+
+    window.addEventListener('resize', () => {
+        const step0 = document.getElementById('step-0');
+        // Ensure we're only repositioning the arrow if Step 0 is displayed
+        if (step0.classList.contains('active-step')) {
+            positionAndAnimateArrow(); // your arrow-drawing function
+        }
+    });
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="js/animation.js"></script>
+
+</body>
+</html>
