@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Vitess Migration with Arrows</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+        /* Basic layout for demonstration */
+        body {
+            margin: 1rem;
+            font-family: sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .component {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            opacity: 0; /* hidden initially */
+            width: 130px;
+        }
+
+        .icon {
+            font-size: 36px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* SVG covering a large area behind components (for arrows) */
+        #diagram {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 600px; /* Adjust as needed */
+            pointer-events: none; /* So clicks pass through */
+            z-index: -1; /* Place behind the components */
+        }
+
+        /* Common arrow style */
+        .arrow {
+            stroke: #2c3e50;
+            stroke-width: 2px;
+            fill: none;
+            stroke-dasharray: 6 6;
+            stroke-dashoffset: 6;
+            opacity: 0; /* hidden by default */
+            marker-end: url(#arrowhead); /* For an arrowhead marker */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Step Control Buttons (Optional) -->
+<div style="text-align:center; margin-bottom:1rem;">
+    <button onclick="goToStep(1)">Step 1</button>
+    <button onclick="goToStep(2)">Step 2</button>
+    <button onclick="goToStep(3)">Step 3</button>
+    <button onclick="goToStep(4)">Step 4</button>
+    <button onclick="goToStep(5)">Step 5</button>
+    <button onclick="goToStep(6)">Step 6</button>
+</div>
+
+<!-- Container for Current System (App + RDS) -->
+<div class="container">
+    <div id="app" class="component">
+        <i class="fa-solid fa-mobile-button icon"></i>
+        <p>Application</p>
+    </div>
+    <div id="rds" class="component">
+        <i class="fa-solid fa-database icon"></i>
+        <p>RDS MySQL</p>
+    </div>
+</div>
+
+<!-- Vitess cluster: vtgate, keyspace shards, external keyspace -->
+<div class="container" id="vitessCluster">
+    <div id="vtgate" class="component">
+        <i class="fa-solid fa-network-wired icon"></i>
+        <p>vtgate</p>
+    </div>
+
+    <div id="keyspace1" class="component">
+        <i class="fa-solid fa-server icon"></i>
+        <p>Keyspace (Shard 1)</p>
+        <small>Primary<br/>Replica1, Replica2</small>
+    </div>
+
+    <div id="keyspace2" class="component">
+        <i class="fa-solid fa-server icon"></i>
+        <p>Keyspace (Shard 2)</p>
+        <small>Primary<br/>Replica1, Replica2</small>
+    </div>
+
+    <div id="externalKeyspace" class="component">
+        <i class="fa-solid fa-cloud icon"></i>
+        <p>External Keyspace</p>
+        <small>Points to RDS</small>
+    </div>
+</div>
+
+<!-- Visual Aids: Routing Rules, Denied Tables -->
+<div class="container">
+    <div id="routingRules" class="component">
+        <i class="fa-solid fa-route icon"></i>
+        <p>Routing Rules</p>
+    </div>
+    <div id="deniedTables" class="component">
+        <i class="fa-solid fa-ban icon"></i>
+        <p>Denied Tables</p>
+        <table style="border:1px dotted">
+            <tr>
+                <th>From</th>
+                <th>To</th>
+            </tr>
+            <tr>
+                <td>t1</td>
+                <td>t1@rds</td>
+            </tr>
+            <tr>
+                <td>t1@replica</td>
+                <td>t1@rds</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<!-- SVG Diagram for Arrows -->
+<svg id="diagram">
+    <!-- Define an arrowhead marker -->
+    <defs>
+        <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="10"
+                refX="6"
+                refY="3"
+                orient="auto"
+        >
+            <path d="M0,0 L0,6 L6,3 z" fill="#2c3e50"/>
+        </marker>
+    </defs>
+
+    <!-- Step 1: Arrow from App -> RDS (Bidirectional for demonstration) -->
+    <line
+            id="arrowAppRDS"
+            class="arrow"
+            x1="520" y1="130"
+            x2="850" y2="130"
+    />
+
+    <!-- Step 2: RDS -> External Keyspace arrow -->
+    <line
+            id="arrowRDSExternal"
+            class="arrow"
+            x1="550" y1="120"
+            x2="850" y2="350"
+    />
+
+    <!-- Step 3: RDS pulling data -> Keyspace (e.g. Keyspace1 or Keyspace2) -->
+    <line
+            id="arrowRDSKeyspace"
+            class="arrow"
+            x1="550" y1="120"
+            x2="480" y2="270"
+    />
+
+    <!-- Step 4: App -> vtgate (then vtgate -> RDS behind the scenes) -->
+    <line
+            id="arrowAppVtgate"
+            class="arrow"
+            x1="300" y1="120"
+            x2="300" y2="320"
+    />
+
+    <!-- Step 5: Show replica reads going to Vitess. (vtgate -> Keyspace) -->
+    <line
+            id="arrowVtgateKeyspace"
+            class="arrow"
+            x1="300" y1="320"
+            x2="400" y2="320"
+    />
+
+    <!-- Step 6: Reverse Replication (Keyspace -> RDS) -->
+    <line
+            id="arrowReverseReplication"
+            class="arrow"
+            x1="700" y1="320"
+            x2="550" y2="120"
+    />
+</svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="animation.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 // Create a master timeline, paused so we can control it via step buttons.
-const tl = gsap.timeline({ defaults: { duration: 1 }, paused: true });
+const tl = gsap.timeline({ defaults: { duration: 0.4 }, paused: true });
 
 // STEP 1: Current System - App <--> RDS
 tl.addLabel("step1")
