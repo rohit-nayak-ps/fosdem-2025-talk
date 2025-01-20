@@ -36,6 +36,10 @@ body {
     left: 75%;
     top: 50%;
 }
+.vtgate-block {
+    left: 25%;
+    top: 50%;
+}
 
 /* The SVG fills the entire container */
 .arrow-line {
@@ -57,7 +61,9 @@ body {
     padding: 10px;
     font-size: 1rem;
     font-family: "Arial", serif;
+    cursor: auto;
 }
+
 .step-block {
     display: none; /* We'll selectively display these in JS */
 }
@@ -65,4 +71,13 @@ body {
 /* Example: some styling or transitions */
 .step-block.show {
     display: block;
+}
+
+#step-0 {
+    height: 30%;
+    display: block;
+}
+
+#step-1 {
+    height: 400px;
 }
