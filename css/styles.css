@@ -1,6 +1,8 @@
 body {
     margin: 1rem;
     font-family: sans-serif;
+    background: black;
+    color:white;
 }
 
 /* Active step is displayed */
@@ -12,9 +14,8 @@ body {
 .diagram-container {
     position: relative;
     width: 100%;
-    height: 400px; /* Adjust as desired */
+    height: 200px; /* Adjust as desired */
     margin-top: 1rem;
-    border: 1px dashed #ccc; /* For reference; remove if desired */
 }
 
 /* The blocks for each item */
@@ -44,8 +45,19 @@ body {
     top: 0;
     left: 0;
     pointer-events: none; /* So clicks pass through */
+    stroke: white;
 }
 
+.arrow-line marker path {
+    fill: white;
+}
+
+.step-btn {
+    background:#F05E19;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: "Arial", serif;
+}
 .step-block {
     display: none; /* We'll selectively display these in JS */
 }
@@ -53,5 +65,4 @@ body {
 /* Example: some styling or transitions */
 .step-block.show {
     display: block;
-    /* or use a fade-in transition if you want an animation, e.g. transition: opacity 0.5s; */
 }
