@@ -37,8 +37,20 @@ body {
     top: 50%;
 }
 .vtgate-block {
+    left: 50%;
+    top: 50%;
+}
+.etcd-block {
+    left: 25%;
+    top: 20%;
+}
+.vtorc-block {
     left: 25%;
     top: 50%;
+}
+.vtctld-block {
+    left: 25%;
+    top: 75%;
 }
 
 /* The SVG fills the entire container */

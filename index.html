@@ -106,24 +106,58 @@
             <p style="color: white; margin: 0.5rem 0 0;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtgate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
         </div>
 
-        <!-- Middle row: etcd, vtorc, vtctld (slightly below vtgate) -->
-        <div class="etcd-block block"
-             style="position: absolute; left: 40%; top: 30%; text-align: center; transform: translate(-50%, -50%);">
-            <i class="fas fa-sitemap fa-2x" style="color: white;"></i>
-            <p style="color: white; margin: 0.5rem 0 0;">etcd</p>
+
+        <div class="control-plane-group"
+             style="
+       position: absolute;
+       left: 15%;        /* Adjust horizontally as needed */
+       top: 10%;         /* Start near top */
+       transform: translateX(-50%);
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       gap: 1rem;
+     ">
+
+            <div class="etcd-block"
+                 style="
+         text-align: center;
+         border: 2px solid white;
+         border-radius: 4px;
+         padding: 0.5rem;
+         background: rgba(255,255,255,0.05); /* Slight translucent fill, optional */
+       ">
+                <i class="fas fa-sitemap fa-2x" style="color: white;"></i>
+                <p style="margin: 0.5rem 0 0; color: white;">etcd</p>
+            </div>
+
+            <div class="vtorc-block"
+                 style="
+         text-align: center;
+         border: 2px solid white;
+         border-radius: 4px;
+         padding: 0.5rem;
+         background: rgba(255,255,255,0.05);
+       ">
+                <i class="fas fa-cogs fa-2x" style="color: white;"></i>
+                <p style="margin: 0.5rem 0 0; color: white;">vtorc</p>
+            </div>
+
+            <div class="vtctld-block"
+                 style="
+         text-align: center;
+         border: 2px solid white;
+         border-radius: 4px;
+         padding: 0.5rem;
+         background: rgba(255,255,255,0.05);
+       ">
+                <i class="fas fa-tools fa-2x" style="color: white;"></i>
+                <p style="margin: 0.5rem 0 0; color: white;">vtctld</p>
+            </div>
+
         </div>
 
-        <div class="vtorc-block block"
-             style="position: absolute; left: 50%; top: 50%; text-align: center; transform: translate(-50%, -50%);">
-            <i class="fas fa-cogs fa-2x" style="color: white;"></i>
-            <p style="color: white; margin: 0.5rem 0 0;">vtorc</p>
-        </div>
 
-        <div class="vtctld-block block"
-             style="position: absolute; left: 60%; top: 30%; text-align: center; transform: translate(-50%, -50%);">
-            <i class="fas fa-tools fa-2x" style="color: white;"></i>
-            <p style="color: white; margin: 0.5rem 0 0;">vtctld</p>
-        </div>
 
         <!-- Shard 1 (top-right) -->
         <div class="shard-1 block" style="position: absolute; left: 85%; top: 20%; transform: translate(-50%, -50%);">
@@ -149,8 +183,8 @@
             </div>
         </div>
 
-        <!-- SVG for lines/arrows -->
-        <svg style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+        <!-- SVG for lines -->
+        <svg class="step1-svg" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
             <defs>
                 <!-- Arrow marker for bidirectional lines -->
                 <marker
@@ -160,46 +194,62 @@
                         refX="6"
                         refY="3"
                         orient="auto">
-                    <path d="M0,0 L0,6 L6,3 z" fill="white" />
+                    <path d="M0,0 L0,6 L6,3 z" fill="white"/>
                 </marker>
+                <!-- Alternatively for dotted lines that need an arrow, you can reuse or create more markers -->
             </defs>
 
-            <!-- Example lines (hard-coded approximate coords).
-                 In a real scenario, you’d calculate x1,y1,x2,y2 dynamically
-                 or refine these after measuring element positions. -->
+            <!-- We'll position these lines dynamically in JS.
+                 For clarity, define one <line> per connection -->
+            <!-- 1) vtgate => shard-1 vttablet (bidirectional) -->
+            <line id="line-vtgate-shard1"
+                  stroke="white"
+                  stroke-width="2"
+                  marker-start="url(#arrow)"
+                  marker-end="url(#arrow)"/>
 
-            <!-- Bidirectional from vtgate => shard-1 vttablet -->
-            <line x1="15%" y1="40%" x2="80%" y2="19%"
-                  stroke="white" stroke-width="2"
-                  marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <!-- 2) vtgate => shard-2 vttablet (bidirectional) -->
+            <line id="line-vtgate-shard2"
+                  stroke="white"
+                  stroke-width="2"
+                  marker-start="url(#arrow)"
+                  marker-end="url(#arrow)"/>
 
-            <!-- Bidirectional from vtgate => shard-2 vttablet -->
-            <line x1="15%" y1="40%" x2="80%" y2="59%"
-                  stroke="white" stroke-width="2"
-                  marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <!-- 3) vtorc => etcd (dotted) -->
+            <line id="line-vtorc-etcd"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-dasharray="4"/>
 
-            <!-- Dotted lines from each component to etcd (illustration only).
-                 Suppose vtorc -> etcd: -->
-            <line x1="50%" y1="50%" x2="40%" y2="30%"
-                  stroke="white" stroke-dasharray="4" stroke-width="2"/>
+            <!-- 4) vtgate => etcd (dotted) -->
+            <line id="line-vtgate-etcd"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-dasharray="4"/>
 
-            <!-- vtgate -> etcd -->
-            <line x1="5%" y1="40%" x2="40%" y2="30%"
-                  stroke="white" stroke-dasharray="4" stroke-width="2"/>
+            <!-- 5) vtctld => etcd (dotted) -->
+            <line id="line-vtctld-etcd"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-dasharray="4"/>
 
-            <!-- vtctld -> etcd -->
-            <line x1="60%" y1="30%" x2="40%" y2="30%"
-                  stroke="white" stroke-dasharray="4" stroke-width="2"/>
+            <!-- 6) vtctld => vttablet shard-1 (dotted) -->
+            <line id="line-vtctld-shard1"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-dasharray="4"/>
 
-            <!-- Dotted lines from vtctld -> vttablets (both shards) -->
-            <line x1="60%" y1="30%" x2="85%" y2="20%"
-                  stroke="white" stroke-dasharray="4" stroke-width="2"/>
-            <line x1="60%" y1="30%" x2="85%" y2="60%"
-                  stroke="white" stroke-dasharray="4" stroke-width="2"/>
+            <!-- 7) vtctld => vttablet shard-2 (dotted) -->
+            <line id="line-vtctld-shard2"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-dasharray="4"/>
 
         </svg>
 
-        <h2 style="position: absolute; left: 40%; top: 80%; text-align: center; transform: translate(-50%, -50%);color: white;">Vitess Cluster</h2>
+
+        <h2 style="position: absolute; left: 40%; top: 80%; text-align: center; transform: translate(-50%, -50%);color: white;">
+            Vitess Cluster</h2>
 
 
     </div> <!-- end .diagram-container -->
@@ -304,6 +354,7 @@
 
         // Also run arrow positioning/animation on initial load (Step 0)
         positionAndAnimateArrow0();
+        positionStep1Arrows();
 
     });
 
@@ -312,10 +363,104 @@
         // Ensure we're only repositioning the arrow if Step 0 is displayed
         if (step0.classList.contains('show')) {
             positionAndAnimateArrow0(); // your arrow-drawing function
+            positionStep1Arrows();
         }
     });
 </script>
 
+<script>
+    // Reuse or adapt your "positionAndAnimateArrow" approach from Step 0.
+    // Just expand it to handle multiple lines dynamically.
+
+    function connectElements(fromEl, toEl, lineEl, containerEl) {
+        // bounding boxes relative to the viewport
+        const fromRect = fromEl.getBoundingClientRect();
+        const toRect = toEl.getBoundingClientRect();
+        const cRect = containerEl.getBoundingClientRect();
+
+        // We'll connect centers. You could also connect edges if you prefer.
+        const x1 = (fromRect.left + fromRect.right) / 2 - cRect.left;
+        const y1 = (fromRect.top + fromRect.bottom) / 2 - cRect.top;
+        const x2 = (toRect.left + toRect.right) / 2 - cRect.left;
+        const y2 = (toRect.top + toRect.bottom) / 2 - cRect.top;
+
+        // Update the line coordinates
+        lineEl.setAttribute('x1', x1);
+        lineEl.setAttribute('y1', y1);
+        lineEl.setAttribute('x2', x2);
+        lineEl.setAttribute('y2', y2);
+    }
+
+    function positionStep1Arrows() {
+        // Container
+        const container = document.querySelector('#step-1 .diagram-container');
+
+        // Query all the needed blocks
+        const vtgate = document.querySelector('.vtgate-block');
+        const etcd = document.querySelector('.etcd-block');
+        const vtorc = document.querySelector('.vtorc-block');
+        const vtctld = document.querySelector('.vtctld-block');
+
+        // Shard 1 vttablet
+        const shard1Tablet = document.querySelector('.shard-1 .vttablet-block');
+        // Shard 2 vttablet
+        const shard2Tablet = document.querySelector('.shard-2 .vttablet-block');
+
+        // Lines
+        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
+        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
+        const lineVtorcEtcd = document.getElementById('line-vtorc-etcd');
+        const lineVtgateEtcd = document.getElementById('line-vtgate-etcd');
+        const lineVtctldEtcd = document.getElementById('line-vtctld-etcd');
+        const lineVtctldShard1 = document.getElementById('line-vtctld-shard1');
+        const lineVtctldShard2 = document.getElementById('line-vtctld-shard2');
+
+        // 1) vtgate => shard-1 vttablet
+        connectElements(vtgate, shard1Tablet, lineVtgateShard1, container);
+        // 2) vtgate => shard-2 vttablet
+        connectElements(vtgate, shard2Tablet, lineVtgateShard2, container);
+        // 3) vtorc => etcd (dotted)
+        connectElements(vtorc, etcd, lineVtorcEtcd, container);
+        // 4) vtgate => etcd (dotted)
+        connectElements(vtgate, etcd, lineVtgateEtcd, container);
+        // 5) vtctld => etcd (dotted)
+        connectElements(vtctld, etcd, lineVtctldEtcd, container);
+        // 6) vtctld => shard-1 vttablet (dotted)
+        connectElements(vtctld, shard1Tablet, lineVtctldShard1, container);
+        // 7) vtctld => shard-2 vttablet (dotted)
+        connectElements(vtctld, shard2Tablet, lineVtctldShard2, container);
+
+        // Suppose we want to animate the two shard lines:
+        gsap.fromTo(
+            lineVtgateShard1,
+            {strokeDashoffset: 100},
+            {strokeDashoffset: 0, duration: 1, ease: 'power1.inOut'}
+        );
+        gsap.fromTo(
+            lineVtgateShard2,
+            {strokeDashoffset: 100},
+            {strokeDashoffset: 0, duration: 1, ease: 'power1.inOut'}
+        );
+
+    }
+
+    // Call it once Step 1 is displayed (and on resize if you want)
+
+    window.addEventListener('resize', () => {
+        // If Step 1 is active, re-position
+        const step1 = document.getElementById('step-1');
+        if (step1 && step1.classList.contains('active-step')) {
+            positionStep1Arrows();
+        }
+    });
+
+    // Also run it immediately if Step 1 is visible upon load or after user clicks Step 1
+    document.querySelector('.step-btn[data-step="1"]').addEventListener('click', () => {
+        // ... your existing logic to show step 1 ...
+        positionStep1Arrows();
+    });
+
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="js/animation.js"></script>
