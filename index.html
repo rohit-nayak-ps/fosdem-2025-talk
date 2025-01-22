@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<div id="step-1" class="step-block show" data-step="1">
+<div id="step-1" class="step-block show" data-step="1" style="border:1px dashed white">
     <div class="diagram-container" style="position: relative; width: 100%; height: 100%; margin-top: 1rem;">
 
         <!-- Title / Label for clarity -->
@@ -105,11 +105,10 @@
             <p style="color: white; margin: 0.5rem 0 0;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtgate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
         </div>
 
-
         <div class="control-plane-group"
              style="
        position: absolute;
-       left: 15%;        /* Adjust horizontally as needed */
+       left: 25%;        /* Adjust horizontally as needed */
        top: 10%;         /* Start near top */
        transform: translateX(-50%);
        display: flex;
@@ -156,27 +155,24 @@
 
         </div>
 
-
-
         <!-- Shard 1 (top-right) -->
-        <div class="shard-1 block" style="position: absolute; left: 85%; top: 20%; transform: translate(-50%, -50%);">
-            <!-- vttablet above MySQL -->
-            <div class="vttablet-block" style="text-align: center;">
+        <div class="shard-1 block" style="position: absolute; left: 85%; top: 20%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+            <div class="vttablet-block" style="text-align: center;margin-right:50px">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
             </div>
-            <div class="mysql-block" style="text-align: center; margin-top: 1rem;">
+            <div class="mysql-block" style="text-align: center;">
                 <i class="fas fa-database fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">mysql</p>
             </div>
         </div>
         <!-- Shard 2 (bottom-right) -->
-        <div class="shard-2 block" style="position: absolute; left: 85%; top: 75%; transform: translate(-50%, -50%);">
-            <div class="vttablet-block" style="text-align: center;padding-bottom:20px">
+        <div class="shard-2 block" style="position: absolute; left: 85%; top: 75%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+            <div class="vttablet-block" style="text-align: center;margin-right:50px">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
             </div>
-            <div class="mysql-block" style="text-align: center; margin-top: 1rem;">
+            <div class="mysql-block" style="text-align: center;">
                 <i class="fas fa-database fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">mysql</p>
             </div>
@@ -201,55 +197,27 @@
             <!-- We'll position these lines dynamically in JS.
                  For clarity, define one <line> per connection -->
             <!-- 1) vtgate => shard-1 vttablet (bidirectional) -->
-            <line id="line-vtgate-shard1"
-                  stroke="white"
-                  stroke-width="2"
-                  marker-start="url(#arrow)"
-                  marker-end="url(#arrow)"/>
+            <line id="line-vtgate-shard1" stroke-dasharray="10"
+                  stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
+                  marker-end="url(#arrow)" style="display:none"/>
 
             <!-- 2) vtgate => shard-2 vttablet (bidirectional) -->
-            <line id="line-vtgate-shard2"
-                  stroke="white"
-                  stroke-width="2"
-                  marker-start="url(#arrow)"
-                  marker-end="url(#arrow)"/>
+            <line id="line-vtgate-shard2" stroke-dasharray="10"
+                  stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
+                  marker-end="url(#arrow)" style="display:none"/>
 
-            <!-- 3) vtorc => etcd (dotted) -->
-            <line id="line-vtorc-etcd"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-dasharray="4"/>
+            <line id="line-rds-shard1-vertical" stroke="white" stroke-width="2" />
+            <line id="line-rds-shard1-horizontal" stroke="white" stroke-width="2" marker-end="url(#arrow)" />
 
-            <!-- 4) vtgate => etcd (dotted) -->
-            <line id="line-vtgate-etcd"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-dasharray="4"/>
+            <!-- Lines for RDS to Shard 2 -->
+            <line id="line-rds-shard2-vertical" stroke="white" stroke-width="2" />
+            <line id="line-rds-shard2-horizontal" stroke="white" stroke-width="2" marker-end="url(#arrow)" />
 
-            <!-- 5) vtctld => etcd (dotted) -->
-            <line id="line-vtctld-etcd"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-dasharray="4"/>
-
-            <!-- 6) vtctld => vttablet shard-1 (dotted) -->
-            <line id="line-vtctld-shard1"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-dasharray="4"/>
-
-            <!-- 7) vtctld => vttablet shard-2 (dotted) -->
-            <line id="line-vtctld-shard2"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-dasharray="4"/>
 
         </svg>
 
-
-        <h2 style="position: absolute; left: 40%; top: 80%; text-align: center; transform: translate(-50%, -50%);color: white;">
-            Vitess Cluster</h2>
-
+        <h1 style="position: absolute; left: 50%; top: 80%; text-align: center; transform: translate(-50%, -50%);color: white;">
+            Vitess Cluster</h1>
 
     </div> <!-- end .diagram-container -->
 </div>

@@ -37,8 +37,8 @@ body {
     top: 50%;
 }
 .vtgate-block {
-    left: 50%;
-    top: 50%;
+    left: 45%;
+    top: 40%;
 }
 .etcd-block {
     left: 25%;
@@ -52,7 +52,6 @@ body {
     left: 25%;
     top: 75%;
 }
-
 /* The SVG fills the entire container */
 .arrow-line {
     position: absolute;
