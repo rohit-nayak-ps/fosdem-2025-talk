@@ -14,15 +14,16 @@
 </head>
 <body>
 
-<!-- Wrap both divs in a parent container with inline CSS -->
 <div style="
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0;
+  margin-top: -30px;
 ">
-    <div class="title" style="xwidth:50%;text-align: center">
+    <div class="title" style="text-align: center; padding:0">
         <h1 style="color:#F05E19">Migrating to Vitess</h1>
     </div>
 
@@ -36,26 +37,20 @@
     </div>
 </div>
 
-
-<!-- Step 0 Content -->
-<div id="step-0" class="step-block show" data-step="0">
+<div id="step-0" class="step-block show" data-step="0" style="margin-top:-40px">
     <div class="diagram-container">
-        <!-- Block: User Application -->
         <div class="block user-app">
             <i class="fas fa-user fa-2x"></i>
             <p>User Application</p>
         </div>
 
-        <!-- Block: RDS Cluster -->
         <div class="block rds-cluster">
             <i class="fas fa-database fa-2x"></i>
             <p>RDS Cluster</p>
         </div>
 
-        <!-- SVG to house the arrow -->
         <svg class="arrow-line">
             <defs>
-                <!-- Arrow marker (both ends) -->
                 <marker
                         id="arrow"
                         markerWidth="10"
@@ -94,11 +89,9 @@
     </div>
 </div>
 
-<div id="step-1" class="step-block show" data-step="1" style="border:1px dashed white">
-    <div class="diagram-container" style="position: relative; width: 100%; height: 100%; margin-top: 1rem;">
+<div id="step-1" class="step-block show" data-step="1" style="border:1px dashed white;margin-bottom: 0;padding:0;">
+    <div class="diagram-container" style="position: relative; width: 100%; height: 100%; ">
 
-        <!-- Title / Label for clarity -->
-        <!-- vtgate (left) -->
         <div class="vtgate-block block"
              style="position: absolute; text-align: center; transform: translate(-50%, -50%);">
             <i class="fas fa-route fa-2x" style="color: white;"></i>
@@ -108,8 +101,8 @@
         <div class="control-plane-group"
              style="
        position: absolute;
-       left: 25%;        /* Adjust horizontally as needed */
-       top: 10%;         /* Start near top */
+       left: 20%;
+       top: 10%;
        transform: translateX(-50%);
        display: flex;
        flex-direction: column;
@@ -152,11 +145,10 @@
                 <i class="fas fa-tools fa-2x" style="color: white;"></i>
                 <p style="margin: 0.5rem 0 0; color: white;">vtctld</p>
             </div>
-
         </div>
 
-        <!-- Shard 1 (top-right) -->
-        <div class="shard-1 block" style="position: absolute; left: 85%; top: 20%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+
+        <div class="eks-shard-1 block" style="position: absolute; left: 55%; top: 20%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
             <div class="vttablet-block" style="text-align: center;margin-right:50px">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
@@ -166,8 +158,28 @@
                 <p style="color: white; margin: 0.5rem 0 0;">mysql</p>
             </div>
         </div>
-        <!-- Shard 2 (bottom-right) -->
-        <div class="shard-2 block" style="position: absolute; left: 85%; top: 75%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+        <div class="eks-shard-2 block" style="position: absolute; left: 55%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+            <div class="vttablet-block" style="text-align: center;margin-right:50px">
+                <i class="fas fa-server fa-2x" style="color: white;"></i>
+                <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
+            </div>
+            <div class="mysql-block" style="text-align: center;">
+                <i class="fas fa-database fa-2x" style="color: white;"></i>
+                <p style="color: white; margin: 0.5rem 0 0;">mysql</p>
+            </div>
+        </div>
+
+        <div class="vks-shard-1 block" style="position: absolute; left: 85%; top: 30%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
+            <div class="vttablet-block" style="text-align: center;margin-right:50px">
+                <i class="fas fa-server fa-2x" style="color: white;"></i>
+                <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
+            </div>
+            <div class="mysql-block" style="text-align: center;">
+                <i class="fas fa-database fa-2x" style="color: white;"></i>
+                <p style="color: white; margin: 0.5rem 0 0;">mysql</p>
+            </div>
+        </div>
+        <div class="vks-shard-2 block" style="position: absolute; left: 85%; top: 75%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
             <div class="vttablet-block" style="text-align: center;margin-right:50px">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
                 <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
@@ -196,45 +208,31 @@
 
             <!-- We'll position these lines dynamically in JS.
                  For clarity, define one <line> per connection -->
-            <!-- 1) vtgate => shard-1 vttablet (bidirectional) -->
+            <!-- 1) vtgate => vks-shard-1 vttablet (bidirectional) -->
             <line id="line-vtgate-shard1" stroke-dasharray="10"
                   stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
                   marker-end="url(#arrow)" style="display:none"/>
 
-            <!-- 2) vtgate => shard-2 vttablet (bidirectional) -->
+            <!-- 2) vtgate => vks-shard-2 vttablet (bidirectional) -->
             <line id="line-vtgate-shard2" stroke-dasharray="10"
                   stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
                   marker-end="url(#arrow)" style="display:none"/>
 
-            <line id="line-rds-shard1-vertical" stroke="white" stroke-width="2" />
-            <line id="line-rds-shard1-horizontal" stroke="white" stroke-width="2" marker-end="url(#arrow)" />
+        </svg>
+
+       <svg id="step01-svg" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+            <line id="line-rds-shard1-vertical" stroke="#333" stroke-width="2" />
+            <line id="line-rds-shard1-horizontal" stroke="#333" stroke-width="2"" />
 
             <!-- Lines for RDS to Shard 2 -->
-            <line id="line-rds-shard2-vertical" stroke="white" stroke-width="2" />
-            <line id="line-rds-shard2-horizontal" stroke="white" stroke-width="2" marker-end="url(#arrow)" />
-
-
+            <line id="line-rds-shard2-vertical" stroke="#333" stroke-width="2" />
+            <line id="line-rds-shard2-horizontal" stroke="#333" stroke-width="2"" />
         </svg>
 
         <h1 style="position: absolute; left: 50%; top: 80%; text-align: center; transform: translate(-50%, -50%);color: white;">
             Vitess Cluster</h1>
 
     </div> <!-- end .diagram-container -->
-</div>
-
-<!-- Step 2 Content (initially hidden) -->
-<div id="step-2" class="step-block" data-step="2">
-    <!-- You will add your Step 2 animated elements here -->
-</div>
-
-<!-- Step 3 Content (initially hidden) -->
-<div id="step-3" class="step-block" data-step="3">
-    <!-- You will add your Step 3 animated elements here -->
-</div>
-
-<!-- Step 4 Content (initially hidden) -->
-<div id="step-4" class="step-block" data-step="4">
-    <!-- You will add your Step 4 animated elements here -->
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

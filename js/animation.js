@@ -84,11 +84,11 @@ class StepManager {
         const etcd = document.querySelector('.etcd-block');
         const vtorc = document.querySelector('.vtorc-block');
         const vtctld = document.querySelector('.vtctld-block');
-        const shard1Tablet = document.querySelector('.shard-1 .vttablet-block');
-        const shard2Tablet = document.querySelector('.shard-2 .vttablet-block');
+        const shard1Tablet = document.querySelector('.vks-shard-1 .vttablet-block');
+        const shard2Tablet = document.querySelector('.vks-shard-2 .vttablet-block');
         const rds = document.querySelector('.rds-cluster');
-        const shard1 = document.querySelector('.shard-1');
-        const shard2 = document.querySelector('.shard-2');
+        const shard1 = document.querySelector('.vks-shard-1');
+        const shard2 = document.querySelector('.vks-shard-2');
 
         const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
         const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
@@ -113,8 +113,14 @@ class StepManager {
         const lineRdsShard2Vertical = document.getElementById('line-rds-shard2-vertical');
         const lineRdsShard2Horizontal = document.getElementById('line-rds-shard2-horizontal');
 
-        this.connectRightAngle(rds, shard1, lineRdsShard1Vertical, lineRdsShard1Horizontal, container);
-        this.connectRightAngle(rds, shard2, lineRdsShard2Vertical, lineRdsShard2Horizontal, container);
+        const rdsRect = rds.getBoundingClientRect();
+        const step1Rect = document.getElementById('step-1').getBoundingClientRect();
+        const step01 = document.getElementById('step01-svg');
+        const offsetY = rdsRect.bottom - step1Rect.top - 20;
+        console.log("offsetY", offsetY);
+        step01.style.top = offsetY;
+        this.connectRightAngle(rds, shard1, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
+        this.connectRightAngle(rds, shard2, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
     }
 
 
@@ -134,15 +140,15 @@ class StepManager {
         lineEl.setAttribute('y2', y2 );
     }
 
-    connectRightAngle(fromEl, toEl, verticalLineEl, horizontalLineEl, containerEl) {
+    connectRightAngle(fromEl, toEl, verticalLineEl, horizontalLineEl, containerEl, offsetY) {
         const fromRect = fromEl.getBoundingClientRect();
         const toRect = toEl.getBoundingClientRect();
         const cRect = containerEl.getBoundingClientRect();
 
         const x1 = (fromRect.left + fromRect.right) / 2 - cRect.left;
-        const y1 = (fromRect.top + fromRect.bottom) / 2 - cRect.top;
-        const x2 = (toRect.left + toRect.right) / 2 - cRect.left;
-        const y2 = (toRect.top + toRect.bottom) / 2 - cRect.top;
+        const y1 = (fromRect.top + fromRect.bottom) / 2 - cRect.top - offsetY;
+        const x2 = toRect.left - 20;
+        const y2 = (toRect.top + toRect.bottom) / 2 - cRect.top - offsetY;
 
         verticalLineEl.setAttribute('x1', x1);
         verticalLineEl.setAttribute('y1', y1);
@@ -155,8 +161,6 @@ class StepManager {
         horizontalLineEl.setAttribute('y2', y2);
     }
 }
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
     new StepManager();

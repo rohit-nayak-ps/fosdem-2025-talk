@@ -5,20 +5,17 @@ body {
     color:white;
 }
 
-/* Active step is displayed */
 .active-step {
     display: block;
 }
 
-/* Diagram container to position everything */
 .diagram-container {
     position: relative;
     width: 100%;
-    height: 200px; /* Adjust as desired */
+    height: 200px;
     margin-top: 1rem;
 }
 
-/* The blocks for each item */
 .block {
     position: absolute;
     text-align: center;
@@ -27,7 +24,6 @@ body {
     border: 4px dashed #ccc;
 }
 
-/* Example positions for Step 0 */
 .user-app {
     left: 25%;
     top: 50%;
@@ -37,7 +33,7 @@ body {
     top: 50%;
 }
 .vtgate-block {
-    left: 45%;
+    left: 35%;
     top: 40%;
 }
 .etcd-block {
@@ -52,14 +48,14 @@ body {
     left: 25%;
     top: 75%;
 }
-/* The SVG fills the entire container */
+
 .arrow-line {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    pointer-events: none; /* So clicks pass through */
+    pointer-events: none;
     stroke: white;
 }
 
@@ -69,26 +65,23 @@ body {
 
 .step-btn {
     background:#F05E19;
-    padding: 10px;
     font-size: 1rem;
     font-family: "Arial", serif;
     cursor: auto;
 }
 
 .step-block {
-    display: none; /* We'll selectively display these in JS */
+    display: none;
 }
 
-/* Example: some styling or transitions */
 .step-block.show {
     display: block;
 }
 
 #step-0 {
-    height: 30%;
     display: block;
 }
 
 #step-1 {
-    height: 400px;
+    height: 500px;
 }
