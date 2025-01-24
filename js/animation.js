@@ -228,6 +228,9 @@ class StepManager {
 
     onStep2() {
         this.dataFlowAll()
+        document.querySelectorAll('.sidecar-icon').forEach(icon => {
+            icon.style.display = 'block';
+        });
     }
 
     offStep2() {
@@ -235,6 +238,9 @@ class StepManager {
         const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
         lineVtgateShard1.style.display = 'none';
         lineVtgateShard2.style.display = 'none';
+        document.querySelectorAll('.sidecar-icon').forEach(icon => {
+            icon.style.display = 'none';
+        });
     }
 }
 
