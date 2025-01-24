@@ -39,15 +39,12 @@ class StepManager {
             }
         });
 
-        console.log('Show step', step);
         for (let i = 0; i <= step; i++) {
-            console.log('On Step', i);
             if (this.onSteps[i]) {
                 this.onSteps[i]();
             }
         }
         for (let i = step + 1; i < this.totalSteps; i++) {
-            console.log('Off Step', i);
             if (this.offSteps[i]) {
                 this.offSteps[i]();
             }
@@ -107,8 +104,8 @@ class StepManager {
         const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
 
 
-        this.connectElements(vtgate, shard1Tablet, lineVtgateShard1, container, 20, -5);
-        this.connectElements(vtgate, shard2Tablet, lineVtgateShard2, container, 20, 5);
+        this.connectElements(vtgate, shard1Tablet, lineVtgateShard1, container, 20, -15, 25);
+        this.connectElements(vtgate, shard2Tablet, lineVtgateShard2, container, 20, 15, 25);
 
         gsap.fromTo(
             lineVtgateShard1,
@@ -136,7 +133,7 @@ class StepManager {
     }
 
 
-    connectElements(fromEl, toEl, lineEl, containerEl, offsetX, offsetY) {
+    connectElements(fromEl, toEl, lineEl, containerEl, offsetX2, offsetY1, offsetY2) {
         const fromRect = fromEl.getBoundingClientRect();
         const toRect = toEl.getBoundingClientRect();
         const cRect = containerEl.getBoundingClientRect();
@@ -147,9 +144,9 @@ class StepManager {
         const y2 = (toRect.top + toRect.bottom) / 2 - cRect.top;
 
         lineEl.setAttribute('x1', x1);
-        lineEl.setAttribute('y1', y1 + offsetY);
-        lineEl.setAttribute('x2', x2 - offsetX);
-        lineEl.setAttribute('y2', y2);
+        lineEl.setAttribute('y1', y1 + offsetY1);
+        lineEl.setAttribute('x2', x2 - offsetX2);
+        lineEl.setAttribute('y2', y2 + offsetY2);
     }
 
     connectRightAngle(fromEl, toEl, verticalLineEl, horizontalLineEl, containerEl, offsetY) {
