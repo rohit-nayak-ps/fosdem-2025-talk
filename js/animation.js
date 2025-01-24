@@ -90,32 +90,29 @@ class StepManager {
 
     positionStep1Arrows() {
         const container = document.querySelector('#step-1 .diagram-container');
-        const vtgate = document.querySelector('.vtgate-block');
-        const etcd = document.querySelector('.etcd-block');
-        const vtorc = document.querySelector('.vtorc-block');
-        const vtctld = document.querySelector('.vtctld-block');
-        const shard1Tablet = document.querySelector('.eks-shard-0-primary .vttablet-block');
-        const shard2Tablet = document.querySelector('.eks-shard-0-replica .vttablet-block');
+        const eksPrimary = document.querySelector('.eks-shard-0-primary .vttablet-block');
+        const eksReplica = document.querySelector('.eks-shard-0-replica .vttablet-block');
         const rds = document.querySelector('.rds-cluster');
         const shard0Primary = document.querySelector('.eks-shard-0-primary');
         const shard0Replica = document.querySelector('.eks-shard-0-replica');
+        const vksPrimary1 = document.querySelector('.vks-shard-1');
+        const vksPrimary2 = document.querySelector('.vks-shard-2');
 
-        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
-        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
+        const lineVksEksPrimary = document.getElementById('line-vks-eksPrimary');
+        const lineVksEksReplica = document.getElementById('line-vks-eksReplica');
 
-
-        this.connectElements(vtgate, shard1Tablet, lineVtgateShard1, container, 20, -15, 25);
-        this.connectElements(vtgate, shard2Tablet, lineVtgateShard2, container, 20, 15, 25);
+        this.connectElements(vksPrimary1, eksPrimary, lineVksEksPrimary, container, 20, 0, 25);
+        this.connectElements(vksPrimary2, eksReplica, lineVksEksReplica, container, 20, 0, 25);
 
         gsap.fromTo(
-            lineVtgateShard1,
+            lineVksEksPrimary,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: true, repeat: -1}
+            {strokeDashoffset: 1, duration: 5, xease: 'power1.inOut', yoyo: false, repeat: -1}
         );
         gsap.fromTo(
-            lineVtgateShard2,
+            lineVksEksReplica,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: true, repeat: -1}
+            {strokeDashoffset: 1, duration: 5, xease: 'power1.inOut', yoyo: false, repeat: -1}
         );
 
         const lineRdsShard1Vertical = document.getElementById('line-rds-shard1-vertical');
@@ -131,7 +128,6 @@ class StepManager {
         this.connectRightAngle(rds, shard0Primary, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
         this.connectRightAngle(rds, shard0Replica, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
     }
-
 
     connectElements(fromEl, toEl, lineEl, containerEl, offsetX2, offsetY1, offsetY2) {
         const fromRect = fromEl.getBoundingClientRect();
@@ -176,30 +172,34 @@ class StepManager {
         el.style.strokeDashoffset = 10;
         el.style.strokeWidth = 2;
         el.style.display = 'block';
-        gsap.fromTo(
+        gsap.from(
             el,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: true, repeat: -1}
+            {strokeDashoffset: 1, duration: 5, ease: 'power1', yoyo:false, repeat: -1}
         );
     }
 
     dataFlowAll() {
-        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
-        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
+        const lineVksEksPrimary = document.getElementById('line-vks-eksPrimary');
+        const lineVksEksReplica = document.getElementById('line-vks-eksReplica');
         const lineRdsShard1Vertical = document.getElementById('line-rds-shard1-vertical');
         const lineRdsShard1Horizontal = document.getElementById('line-rds-shard1-horizontal');
         const lineRdsShard2Vertical = document.getElementById('line-rds-shard2-vertical');
         const lineRdsShard2Horizontal = document.getElementById('line-rds-shard2-horizontal');
-        this.dataFlow(lineVtgateShard1);
-        this.dataFlow(lineVtgateShard2);
+        this.dataFlow(lineVksEksPrimary);
+        this.dataFlow(lineVksEksReplica);
         this.dataFlow(lineRdsShard1Vertical);
         this.dataFlow(lineRdsShard1Horizontal);
         this.dataFlow(lineRdsShard2Vertical);
         this.dataFlow(lineRdsShard2Horizontal);
+        lineRdsShard1Horizontal.style.markerEnd = 'url(#arrow)';
+        lineRdsShard2Horizontal.style.markerEnd = 'url(#arrow)';
+        lineRdsShard2Vertical.style.markerStart = 'url(#arrow-reversed)';
+        lineRdsShard1Vertical.style.markerStart = 'url(#arrow-reversed)';
     }
 
     dbLink(el) {
-        el.style.stroke = '#333';
+        el.style.stroke = '#444';
         el.style.strokeDasharray = 0;
         el.style.strokeDashoffset = 0;
         el.style.strokeWidth = 1;
@@ -214,6 +214,8 @@ class StepManager {
         this.dbLink(lineRdsShard1Horizontal);
         this.dbLink(lineRdsShard2Vertical);
         this.dbLink(lineRdsShard2Horizontal);
+        lineRdsShard1Horizontal.style.markerEnd = '';
+        lineRdsShard2Horizontal.style.markerEnd = '';
     }
 
     onStep0() {
@@ -231,13 +233,17 @@ class StepManager {
         document.querySelectorAll('.sidecar-icon').forEach(icon => {
             icon.style.display = 'block';
         });
+        const lineVksEksPrimary = document.getElementById('line-vks-eksPrimary');
+        const lineVksEksReplica = document.getElementById('line-vks-eksReplica');
+        lineVksEksPrimary.style.markerEnd = 'none';
+        lineVksEksReplica.style.markerEnd = 'none';
     }
 
     offStep2() {
-        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
-        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
-        lineVtgateShard1.style.display = 'none';
-        lineVtgateShard2.style.display = 'none';
+        const lineVksEksPrimary = document.getElementById('line-vks-eksPrimary');
+        const lineVksEksReplica = document.getElementById('line-vks-eksReplica');
+        lineVksEksPrimary.style.display = 'none';
+        lineVksEksReplica.style.display = 'none';
         document.querySelectorAll('.sidecar-icon').forEach(icon => {
             icon.style.display = 'none';
         });
