@@ -1,7 +1,10 @@
 class StepManager {
     constructor() {
-        this.steps = {};
         this.currentStep = 0;
+        this.onSteps = {};
+        this.offSteps = {};
+        this.totalSteps = 3;
+
         this.init();
     }
 
@@ -15,9 +18,11 @@ class StepManager {
 
         window.addEventListener('resize', () => this.onResize());
 
-        // Initialize steps
-        this.steps[0] = this.positionAndAnimateArrow0.bind(this);
-        this.steps[1] = this.positionStep1Arrows.bind(this);
+        this.onSteps[0] = this.onStep0.bind(this);
+        this.onSteps[1] = this.onStep1.bind(this);
+        this.onSteps[2] = this.onStep2.bind(this);
+
+        this.offSteps[2] = this.offStep2.bind(this);
 
         // Show initial step
         this.showStep(0);
@@ -34,15 +39,23 @@ class StepManager {
             }
         });
 
-        if (this.steps[step]) {
-            this.steps[step]();
+        console.log('Show step', step);
+        for (let i = 0; i <= step; i++) {
+            console.log('On Step', i);
+            if (this.onSteps[i]) {
+                this.onSteps[i]();
+            }
+        }
+        for (let i = step + 1; i < this.totalSteps; i++) {
+            console.log('Off Step', i);
+            if (this.offSteps[i]) {
+                this.offSteps[i]();
+            }
         }
     }
 
     onResize() {
-        if (this.steps[this.currentStep]) {
-            this.steps[this.currentStep]();
-        }
+        this.showStep(this.currentStep);
     }
 
     positionAndAnimateArrow0() {
@@ -117,8 +130,7 @@ class StepManager {
         const step1Rect = document.getElementById('step-1').getBoundingClientRect();
         const step01 = document.getElementById('step01-svg');
         const offsetY = rdsRect.bottom - step1Rect.top - 20;
-        console.log("offsetY", offsetY);
-        step01.style.top = offsetY;
+        step01.style.top = offsetY + 'px';
         this.connectRightAngle(rds, shard0Primary, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
         this.connectRightAngle(rds, shard0Replica, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
     }
@@ -134,10 +146,10 @@ class StepManager {
         const x2 = toRect.left - cRect.left;
         const y2 = (toRect.top + toRect.bottom) / 2 - cRect.top;
 
-        lineEl.setAttribute('x1', x1 );
+        lineEl.setAttribute('x1', x1);
         lineEl.setAttribute('y1', y1 + offsetY);
         lineEl.setAttribute('x2', x2 - offsetX);
-        lineEl.setAttribute('y2', y2 );
+        lineEl.setAttribute('y2', y2);
     }
 
     connectRightAngle(fromEl, toEl, verticalLineEl, horizontalLineEl, containerEl, offsetY) {
@@ -159,6 +171,73 @@ class StepManager {
         horizontalLineEl.setAttribute('y1', y2);
         horizontalLineEl.setAttribute('x2', x2);
         horizontalLineEl.setAttribute('y2', y2);
+    }
+
+    dataFlow(el) {
+        el.style.stroke = 'white';
+        el.style.strokeDasharray = 10;
+        el.style.strokeDashoffset = 10;
+        el.style.strokeWidth = 2;
+        el.style.display = 'block';
+        gsap.fromTo(
+            el,
+            {strokeDashoffset: 100},
+            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: true, repeat: -1}
+        );
+    }
+
+    dataFlowAll() {
+        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
+        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
+        const lineRdsShard1Vertical = document.getElementById('line-rds-shard1-vertical');
+        const lineRdsShard1Horizontal = document.getElementById('line-rds-shard1-horizontal');
+        const lineRdsShard2Vertical = document.getElementById('line-rds-shard2-vertical');
+        const lineRdsShard2Horizontal = document.getElementById('line-rds-shard2-horizontal');
+        this.dataFlow(lineVtgateShard1);
+        this.dataFlow(lineVtgateShard2);
+        this.dataFlow(lineRdsShard1Vertical);
+        this.dataFlow(lineRdsShard1Horizontal);
+        this.dataFlow(lineRdsShard2Vertical);
+        this.dataFlow(lineRdsShard2Horizontal);
+    }
+
+    dbLink(el) {
+        el.style.stroke = '#333';
+        el.style.strokeDasharray = 0;
+        el.style.strokeDashoffset = 0;
+        el.style.strokeWidth = 1;
+    }
+
+    dbLinkAll() {
+        const lineRdsShard1Vertical = document.getElementById('line-rds-shard1-vertical');
+        const lineRdsShard1Horizontal = document.getElementById('line-rds-shard1-horizontal');
+        const lineRdsShard2Vertical = document.getElementById('line-rds-shard2-vertical');
+        const lineRdsShard2Horizontal = document.getElementById('line-rds-shard2-horizontal');
+        this.dbLink(lineRdsShard1Vertical);
+        this.dbLink(lineRdsShard1Horizontal);
+        this.dbLink(lineRdsShard2Vertical);
+        this.dbLink(lineRdsShard2Horizontal);
+    }
+
+    onStep0() {
+        this.positionAndAnimateArrow0();
+    }
+
+    onStep1() {
+        this.positionStep1Arrows()
+        this.dbLinkAll()
+
+    }
+
+    onStep2() {
+        this.dataFlowAll()
+    }
+
+    offStep2() {
+        const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
+        const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
+        lineVtgateShard1.style.display = 'none';
+        lineVtgateShard2.style.display = 'none';
     }
 }
 
