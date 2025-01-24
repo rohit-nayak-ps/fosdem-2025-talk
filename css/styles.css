@@ -24,6 +24,14 @@ body {
     border: 4px dashed #ccc;
 }
 
+.blockReplica1 {
+    opacity: 30%;
+}
+
+.blockReplica2 {
+    opacity: 20%;
+}
+
 .user-app {
     left: 25%;
     top: 50%;
@@ -83,5 +91,7 @@ body {
 }
 
 #step-1 {
-    height: 500px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 550px;
 }

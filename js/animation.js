@@ -84,11 +84,11 @@ class StepManager {
         const etcd = document.querySelector('.etcd-block');
         const vtorc = document.querySelector('.vtorc-block');
         const vtctld = document.querySelector('.vtctld-block');
-        const shard1Tablet = document.querySelector('.vks-shard-1 .vttablet-block');
-        const shard2Tablet = document.querySelector('.vks-shard-2 .vttablet-block');
+        const shard1Tablet = document.querySelector('.eks-shard-0-primary .vttablet-block');
+        const shard2Tablet = document.querySelector('.eks-shard-0-replica .vttablet-block');
         const rds = document.querySelector('.rds-cluster');
-        const shard1 = document.querySelector('.vks-shard-1');
-        const shard2 = document.querySelector('.vks-shard-2');
+        const shard0Primary = document.querySelector('.eks-shard-0-primary');
+        const shard0Replica = document.querySelector('.eks-shard-0-replica');
 
         const lineVtgateShard1 = document.getElementById('line-vtgate-shard1');
         const lineVtgateShard2 = document.getElementById('line-vtgate-shard2');
@@ -119,8 +119,8 @@ class StepManager {
         const offsetY = rdsRect.bottom - step1Rect.top - 20;
         console.log("offsetY", offsetY);
         step01.style.top = offsetY;
-        this.connectRightAngle(rds, shard1, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
-        this.connectRightAngle(rds, shard2, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
+        this.connectRightAngle(rds, shard0Primary, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
+        this.connectRightAngle(rds, shard0Replica, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
     }
 
 
