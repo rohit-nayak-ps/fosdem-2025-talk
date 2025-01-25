@@ -3,7 +3,7 @@ class StepManager {
         this.currentStep = 0;
         this.onSteps = {};
         this.offSteps = {};
-        this.totalSteps = 3;
+        this.totalSteps = 4;
 
         this.init();
     }
@@ -21,8 +21,11 @@ class StepManager {
         this.onSteps[0] = this.onStep0.bind(this);
         this.onSteps[1] = this.onStep1.bind(this);
         this.onSteps[2] = this.onStep2.bind(this);
+        this.onSteps[3] = this.onStep3.bind(this);
+
 
         this.offSteps[2] = this.offStep2.bind(this);
+        this.offSteps[3] = this.offStep3.bind(this);
 
         // Show initial step
         this.showStep(0);
@@ -107,12 +110,12 @@ class StepManager {
         gsap.fromTo(
             lineVksEksPrimary,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, xease: 'power1.inOut', yoyo: false, repeat: -1}
+            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: false, repeat: -1}
         );
         gsap.fromTo(
             lineVksEksReplica,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, xease: 'power1.inOut', yoyo: false, repeat: -1}
+            {strokeDashoffset: 1, duration: 5, ease: 'power1.inOut', yoyo: false, repeat: -1}
         );
 
         const lineRdsShard1Vertical = document.getElementById('line-rds-shard1-vertical');
@@ -172,11 +175,11 @@ class StepManager {
         el.style.strokeDashoffset = 10;
         el.style.strokeWidth = 2;
         el.style.display = 'block';
-        gsap.from(
+        gsap.fromTo(
             el,
             {strokeDashoffset: 100},
-            {strokeDashoffset: 1, duration: 5, ease: 'power1', yoyo:false, repeat: -1}
-        );
+        {strokeDashoffset: 1, duration: 5, ease: 'power1', yoyo:true, repeat: -1}
+    );
     }
 
     dataFlowAll() {
@@ -247,6 +250,65 @@ class StepManager {
         document.querySelectorAll('.sidecar-icon').forEach(icon => {
             icon.style.display = 'none';
         });
+    }
+
+    onStep3() {
+        const rds = document.querySelector('.rds-cluster');
+        const rdsRect = rds.getBoundingClientRect();
+        const step3Rect = document.getElementById('step3-svg').getBoundingClientRect();
+        const step3 = document.getElementById('step3-svg');
+        const offsetY = rdsRect.top - step3Rect.top;
+        console.log(offsetY);
+        step3.style.top = offsetY + 'px';
+        this.positionAndAnimateArrow3();
+        const rdsLine = document.getElementById('dynamic-arrow')
+        rdsLine.style.markerStart = 'none';
+    }
+
+    offStep3() {
+        const lineUserVtgate = document.getElementById('line-user-vtgate');
+        lineUserVtgate.style.display = 'none';
+        lineUserVtgate.style.markerStart = '';
+        const rdsLine = document.getElementById('dynamic-arrow')
+        rdsLine.style.markerStart = 'url(#arrow-reversed)';
+    }
+
+    positionAndAnimateArrow3() {
+        const container = document.querySelector('.diagram-container');
+        const userApp = document.querySelector('.user-app');
+        const vtgate = document.querySelector('.vtgate-block');
+        const arrowLine = document.getElementById('line-user-vtgate');
+
+        const containerRect = container.getBoundingClientRect();
+        const userRect = userApp.getBoundingClientRect();
+        const vtgateRect = vtgate.getBoundingClientRect();
+
+        const x1 = userRect.left + ((userRect.right - userRect.left) / 2) - 10;
+        const y1 = ((userRect.top + userRect.bottom) / 2) - containerRect.top + 20;
+        const x2 = vtgateRect.left + ((vtgateRect.right - vtgateRect.left) / 2) - 20;
+        const y2 = vtgateRect.top - containerRect.top - 40;
+
+        arrowLine.setAttribute('x1', x1);
+        arrowLine.setAttribute('y1', y1);
+        arrowLine.setAttribute('x2', x2);
+        arrowLine.setAttribute('y2', y2);
+
+        arrowLine.style.display = 'block';
+        arrowLine.style.markerEnd = 'none';
+
+
+
+        gsap.fromTo(
+            arrowLine,
+            {strokeDashoffset: 100},
+            {
+                strokeDashoffset: 1,
+                duration: 5,
+                ease: 'power1.inOut',
+                repeat: -1,
+                yoyo: true
+            }
+        );
     }
 }
 
