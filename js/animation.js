@@ -460,7 +460,7 @@ class StepManager {
         rds.style.display = 'none';
         this.hideWorkflows();
         document.querySelector('.denied-tables').style.display = 'none';
-
+        document.querySelector('.routing-rules').style.display = 'none';
     }
 
     positionAndAnimateArrow3() {
