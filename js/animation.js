@@ -265,6 +265,8 @@ class StepManager {
     // rds cluster
     onStep0() {
         this.positionAndAnimateArrow0();
+        document.getElementById('mysql-protocol-text').style.display = 'block';
+
     }
 
     // Vitess cluster
@@ -408,6 +410,8 @@ class StepManager {
         const deniedTables = document.querySelector('.denied-tables');
         deniedTables.style.right = '80px';
         deniedTables.style.top = '120px';
+        document.getElementById('mysql-protocol-text').style.display = 'none';
+
     }
 
     showWorkflows() {
