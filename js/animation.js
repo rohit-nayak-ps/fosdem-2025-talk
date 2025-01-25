@@ -266,7 +266,7 @@ class StepManager {
     onStep0() {
         this.positionAndAnimateArrow0();
         document.getElementById('mysql-protocol-text').style.display = 'block';
-
+        document.getElementById('mysql-protocol-text-rds').style.display = 'none';
     }
 
     // Vitess cluster
@@ -295,6 +295,7 @@ class StepManager {
             ['eks.t1', 'eks.t1', 'eks.t1']
         );
         document.querySelector('.denied-tables').style.display = 'block';
+        document.getElementById('mysql-protocol-text-rds').style.display = 'block';
 
     }
 
@@ -325,6 +326,8 @@ class StepManager {
             ['t1', 't1@primary', 't1@replica'],
             ['eks.t1', 'eks.t1', 'vks.t1']
         );
+        const grpcText = document.getElementById('grpc-text');
+        grpcText.style.display = 'block';
     }
 
     positionAndAnimateArrowVtgateToVks() {
@@ -378,11 +381,15 @@ class StepManager {
         lineVtgateVksShard2.style.display = 'none';
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.markerStart = 'url(#arrow-reversed)';
+        const textElement = document.getElementById('mysql-protocol-text-user-vtgate');
+        textElement.style.display = 'none';
+        const grpcText = document.getElementById('grpc-text');
+        grpcText.style.display = 'none';
+
     }
 
     // switch writes
     offStep4() {
-        console.log('offStep4');
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'block';
         const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
@@ -392,6 +399,12 @@ class StepManager {
         const deniedTables = document.querySelector('.denied-tables');
         deniedTables.style.right = '55%';
         deniedTables.style.top = '0px';
+        const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
+        reverseSideCar.style.display = 'none';
+        const sidecars = document.querySelectorAll('.sidecar-icon');
+        sidecars.forEach(sidecar => {
+            sidecar.style.display = 'block';
+        });
     }
 
     onStep4() {
@@ -411,11 +424,17 @@ class StepManager {
         deniedTables.style.right = '80px';
         deniedTables.style.top = '120px';
         document.getElementById('mysql-protocol-text').style.display = 'none';
+        document.getElementById('mysql-protocol-text-rds').style.display = 'none';
+        const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
+        reverseSideCar.style.display = 'block';
+        const sidecars = document.querySelectorAll('.sidecar-icon');
+        sidecars.forEach(sidecar => {
+            sidecar.style.display = 'none';
+        });
 
     }
 
     showWorkflows() {
-        console.log('showWorkflows');
         const workflows = document.querySelectorAll('.workflow');
         workflows.forEach(workflow => {
             workflow.style.display = 'block';
@@ -423,7 +442,6 @@ class StepManager {
     }
 
     hideWorkflows() {
-        console.log('hideWorkflows');
         const workflows = document.querySelectorAll('.workflow');
         workflows.forEach(workflow => {
             workflow.style.display = 'none';
@@ -480,9 +498,19 @@ class StepManager {
                 yoyo: true
             }
         );
+        const textElement = document.getElementById('mysql-protocol-text-user-vtgate');
+        const textX = (x1 + x2) / 2;
+        const textY = (y1 + y2) / 2;
+        textElement.setAttribute('x', textX);
+        textElement.setAttribute('y', textY);
+        textElement.style.display = 'block';
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     new StepManager();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('mysql-protocol-text-rds').style.display = 'none';
 });

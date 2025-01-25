@@ -36,7 +36,6 @@
         <button class="step-btn" data-step="5">Complete</button>
     </div>
 </div>
-
 <div id="step-0" class="step-block show" data-step="0" style="margin-top:-40px">
     <div class="diagram-container">
         <div class="block user-app">
@@ -46,11 +45,15 @@
 
         <div class="block rds-cluster">
             <i class="fas fa-database fa-2x"></i>
-            <i class="fas fa-car-side fa-1x reverse-sidecar-icon" style="color: white;position:absolute;top:35px;right:25px;display:none"></i>
+            <i class="fas fa-car-side fa-1x reverse-sidecar-icon" style="color: white;position:absolute;top:35px;right:27px;display:none"></i>
             <p>RDS Cluster</p>
         </div>
+        <p class="workflow" id="mysql-protocol-text-rds" style="color: white; text-align: center; display: none; position:absolute;top:160px;right:170px;">
+            MySQL Protocol
+        </p>
 
-         <svg class="arrow-line">
+
+        <svg class="arrow-line">
             <defs>
                 <marker
                         id="arrow"
@@ -99,7 +102,7 @@
         <div class="vtgate-block block"
              style="position: absolute; text-align: center; transform: translate(-50%, -50%);">
             <i class="fas fa-route fa-2x" style="color: white;"></i>
-            <p style="color: white; margin: 0.5rem 0 0;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtgate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p style="color: orange; margin: 0.5rem 0 0;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtgate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
         </div>
 
         <div class="routing-rules" style="position: absolute; left: 3%; top: 20%; display: none;">
@@ -181,7 +184,7 @@
          background: rgba(255,255,255,0.05);
        ">
                 <i class="fas fa-cogs fa-2x" style="color: white;"></i>
-                <p style="margin: 0.5rem 0 0; color: white;">vtorc</p>
+                <p style="margin: 0.5rem 0 0; color: orange;">vtorc</p>
             </div>
 
             <div class="vtctld-block"
@@ -193,7 +196,7 @@
          background: rgba(255,255,255,0.05);
        ">
                 <i class="fas fa-tools fa-2x" style="color: white;"></i>
-                <p style="margin: 0.5rem 0 0; color: white;">vtctld</p>
+                <p style="margin: 0.5rem 0 0; color: orange;">vtctld</p>
             </div>
         </div>
 
@@ -201,7 +204,7 @@
              style="position: absolute; left: 55%; top: 10%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
             <div class="vttablet-block" style="text-align: center;">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
-                <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
+                <p style="color: orange; margin: 0.5rem 0 0;">vttablet</p>
             </div>
             <span style="color:orange;font-size:larger">-80<br><span style="font-size:small">primary</span></span>
             <div class="mysql-block" style="text-align: center;">
@@ -239,7 +242,7 @@
              style="position: absolute; left: 55%; top: 55%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
             <div class="vttablet-block" style="text-align: center;">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
-                <p style="color: white; margin: 0.5rem 0 0;">vttablet</p>
+                <p style="color: orange; margin: 0.5rem 0 0;">vttablet</p>
             </div>
             <span style="color:orange;font-size:larger">80-<br><span style="font-size:small">primary</span></span>
             <div class="mysql-block" style="text-align: center;">
@@ -284,7 +287,7 @@
              style="position: absolute; left: 85%; top: 30%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 1rem;">
             <div class="vttablet-block" style="text-align: center;">
                 <i class="fas fa-server fa-2x" style="color: white;"></i>
-                <p style="color: white;">vttablet<br><span style="font-size:small;color:orange;">primary</span></p>
+                <p style="color: orange;">vttablet<br><span style="font-size:small;color:orange;">primary</span></p>
             </div>
         </div>
         <div class="eks-shard-0-replica block blockReplica1 workflow"
@@ -308,7 +311,7 @@
             <line id="line-vks-eksReplica" stroke-dasharray="10"
                   stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
                   marker-end="url(#arrow)" style="display:none"/>
-            <text x="75%" y="55%" fill="white" text-anchor="middle" dy="0" transform="rotate(1, 50, 50)">
+            <text x="75%" y="55%" fill="orange" text-anchor="middle" dy="0" transform="rotate(1, 50, 50)">
                 VEvents
             </text>
 
@@ -325,7 +328,12 @@
             <line id="line-vtgate-vksShard2" stroke-dasharray="10"
                   stroke-dashoffset="10" stroke="white" stroke-width="2" marker-start="url(#arrow-reversed)"
                   marker-end="url(#arrow)" style="display:none"/>
-
+            <text id="mysql-protocol-text-user-vtgate" x="50%" y="50%" fill="white" text-anchor="middle" dy="-10" style="display:none;">
+                MySQL Protocol
+            </text>
+            <text id="grpc-text" x="50%" y="50%" fill="white" text-anchor="middle" dx="-100" dy="200" style="display:none;">
+                GRPC
+            </text>
         </svg>
 
         <svg id="step01-svg" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
