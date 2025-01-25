@@ -78,6 +78,10 @@ body {
     cursor: auto;
 }
 
+.current-step {
+    border: 2px inset orangered; /* Gold border to highlight the current step */
+}
+
 .step-block {
     display: none;
 }
@@ -94,4 +98,23 @@ body {
     padding-top: 20px;
     padding-bottom: 20px;
     height: 600px;
+}
+
+.table-grid {
+    font-size: small;
+    border-collapse: collapse;
+    color: white;
+}
+
+.table-grid th, .table-grid td {
+    border: 0.5px dotted white;
+}
+
+.table-grid td {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.denied-tables th, .table-grid td{
+    border: 0;
 }

@@ -3,9 +3,10 @@ class StepManager {
         this.currentStep = 0;
         this.onSteps = {};
         this.offSteps = {};
-        this.totalSteps = 4;
+        this.totalSteps = 6
 
         this.init();
+
     }
 
     init() {
@@ -56,10 +57,28 @@ class StepManager {
                 this.offSteps[i]();
             }
         }
+        this.updateStepButtonColors(step);
     }
 
     onResize() {
         this.showStep(this.currentStep);
+    }
+
+    updateStepButtonColors(currentStep) {
+        const buttons = document.querySelectorAll('.step-btn');
+        buttons.forEach((button, index) => {
+            if (index <= currentStep) {
+                if (index === currentStep) {
+                    button.classList.add('current-step');
+                } else {
+                    button.classList.remove('current-step');
+                }
+                button.style.backgroundColor = `#F05E19`;
+            } else {
+                button.classList.remove('current-step');
+                button.style.backgroundColor = '#777';
+            }
+        });
     }
 
     positionAndAnimateArrow0() {
@@ -93,6 +112,24 @@ class StepManager {
                 yoyo: true
             }
         );
+    }
+
+    setRoutingRules(fromArray, toArray) {
+        const tbody = document.getElementById('routing-rules-body');
+        tbody.innerHTML = ''; // Clear existing rows
+
+        for (let i = 0; i < fromArray.length; i++) {
+            const row = document.createElement('tr');
+            const fromCell = document.createElement('td');
+            const toCell = document.createElement('td');
+
+            fromCell.textContent = fromArray[i];
+            toCell.textContent = toArray[i];
+
+            row.appendChild(fromCell);
+            row.appendChild(toCell);
+            tbody.appendChild(row);
+        }
     }
 
     positionStep1Arrows() {
@@ -130,7 +167,7 @@ class StepManager {
         const rdsRect = rds.getBoundingClientRect();
         const step1Rect = document.getElementById('step-1').getBoundingClientRect();
         const step01 = document.getElementById('step01-svg');
-        const offsetY = rdsRect.bottom - step1Rect.top - 20;
+        const offsetY = rdsRect.bottom - step1Rect.top -20;
         step01.style.top = offsetY + 'px';
         this.connectRightAngle(rds, shard0Primary, lineRdsShard1Vertical, lineRdsShard1Horizontal, container, offsetY);
         this.connectRightAngle(rds, shard0Replica, lineRdsShard2Vertical, lineRdsShard2Horizontal, container, offsetY);
@@ -250,6 +287,13 @@ class StepManager {
         const lineVksEksReplica = document.getElementById('line-vks-eksReplica');
         lineVksEksPrimary.style.markerEnd = 'none';
         lineVksEksReplica.style.markerEnd = 'none';
+        document.querySelector('.routing-rules').style.display = 'block';
+        this.setRoutingRules(
+            ['t1', 't1@primary', 't1@replica'],
+            ['eks.t1', 'eks.t1', 'eks.t1']
+        );
+        document.querySelector('.denied-tables').style.display = 'block';
+
     }
 
     offStep2() {
@@ -275,6 +319,10 @@ class StepManager {
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'block';
         rdsLine.style.markerStart = 'none';
+        this.setRoutingRules(
+            ['t1', 't1@primary', 't1@replica'],
+            ['eks.t1', 'eks.t1', 'vks.t1']
+        );
     }
 
     positionAndAnimateArrowVtgateToVks() {
@@ -332,8 +380,16 @@ class StepManager {
 
     // switch writes
     offStep4() {
+        console.log('offStep4');
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'block';
+        const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
+        const arrowLine2 = document.getElementById('line-vtgate-vksShard2');
+        arrowLine1.style.markerEnd = 'none';
+        arrowLine2.style.markerEnd = 'none';
+        const deniedTables = document.querySelector('.denied-tables');
+        deniedTables.style.right = '55%';
+        deniedTables.style.top = '0px';
     }
 
     onStep4() {
@@ -341,6 +397,17 @@ class StepManager {
         rdsLine.style.display = 'none';
         const lineUserVtgate = document.getElementById('line-user-vtgate');
         lineUserVtgate.style.markerEnd = 'url(#arrow)';
+        const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
+        const arrowLine2 = document.getElementById('line-vtgate-vksShard2');
+        arrowLine1.style.markerEnd = 'url(#arrow)';
+        arrowLine2.style.markerEnd = 'url(#arrow)';
+        this.setRoutingRules(
+            ['t1', 't1@primary', 't1@replica'],
+            ['vks.t1', 'vks.t1', 'vks.t1']
+        );
+        const deniedTables = document.querySelector('.denied-tables');
+        deniedTables.style.right = '80px';
+        deniedTables.style.top = '120px';
     }
 
     showWorkflows() {
@@ -370,6 +437,8 @@ class StepManager {
         const rds = document.querySelector('.rds-cluster');
         rds.style.display = 'none';
         this.hideWorkflows();
+        document.querySelector('.denied-tables').style.display = 'none';
+
     }
 
     positionAndAnimateArrow3() {
