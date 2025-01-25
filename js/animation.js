@@ -253,12 +253,11 @@ class StepManager {
     }
 
     onStep3() {
+        const step3 = document.getElementById('step3-svg');
         const rds = document.querySelector('.rds-cluster');
         const rdsRect = rds.getBoundingClientRect();
-        const step3Rect = document.getElementById('step3-svg').getBoundingClientRect();
-        const step3 = document.getElementById('step3-svg');
-        const offsetY = rdsRect.top - step3Rect.top;
-        console.log(offsetY);
+        const step1Rect = document.getElementById('step-1').getBoundingClientRect();
+        const offsetY = rdsRect.top - step1Rect.top - 10;
         step3.style.top = offsetY + 'px';
         this.positionAndAnimateArrow3();
         const rdsLine = document.getElementById('dynamic-arrow')
