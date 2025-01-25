@@ -22,10 +22,14 @@ class StepManager {
         this.onSteps[1] = this.onStep1.bind(this);
         this.onSteps[2] = this.onStep2.bind(this);
         this.onSteps[3] = this.onStep3.bind(this);
+        this.onSteps[4] = this.onStep4.bind(this);
+        this.onSteps[5] = this.onStep5.bind(this);
 
 
         this.offSteps[2] = this.offStep2.bind(this);
         this.offSteps[3] = this.offStep3.bind(this);
+        this.offSteps[4] = this.offStep4.bind(this);
+        this.offSteps[5] = this.offStep5.bind(this);
 
         // Show initial step
         this.showStep(0);
@@ -178,8 +182,8 @@ class StepManager {
         gsap.fromTo(
             el,
             {strokeDashoffset: 100},
-        {strokeDashoffset: 1, duration: 5, ease: 'power1', yoyo:true, repeat: -1}
-    );
+            {strokeDashoffset: 1, duration: 5, ease: 'power1', yoyo: true, repeat: -1}
+        );
     }
 
     dataFlowAll() {
@@ -228,6 +232,9 @@ class StepManager {
     onStep1() {
         this.positionStep1Arrows()
         this.dbLinkAll()
+        const rds = document.querySelector('.rds-cluster');
+        rds.style.display = 'block';
+        this.showWorkflows()
 
     }
 
@@ -261,6 +268,7 @@ class StepManager {
         step3.style.top = offsetY + 'px';
         this.positionAndAnimateArrow3();
         const rdsLine = document.getElementById('dynamic-arrow')
+        rdsLine.style.display = 'block';
         rdsLine.style.markerStart = 'none';
     }
 
@@ -270,6 +278,46 @@ class StepManager {
         lineUserVtgate.style.markerStart = '';
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.markerStart = 'url(#arrow-reversed)';
+    }
+
+    offStep4() {
+        const rdsLine = document.getElementById('dynamic-arrow')
+        rdsLine.style.display = 'block';
+    }
+
+    onStep4() {
+        const rdsLine = document.getElementById('dynamic-arrow')
+        rdsLine.style.display = 'none';
+        const lineUserVtgate = document.getElementById('line-user-vtgate');
+        lineUserVtgate.style.markerEnd = 'url(#arrow)';
+    }
+
+    showWorkflows() {
+        console.log('showWorkflows');
+        const workflows = document.querySelectorAll('.workflow');
+        workflows.forEach(workflow => {
+            workflow.style.display = 'block';
+        });
+    }
+
+    hideWorkflows() {
+        console.log('hideWorkflows');
+        const workflows = document.querySelectorAll('.workflow');
+        workflows.forEach(workflow => {
+            workflow.style.display = 'none';
+        });
+    }
+
+    offStep5() {
+        const rds = document.querySelector('.rds-cluster');
+        rds.style.display = 'block';
+        this.showWorkflows();
+    }
+
+    onStep5() {
+        const rds = document.querySelector('.rds-cluster');
+        rds.style.display = 'none';
+        this.hideWorkflows();
     }
 
     positionAndAnimateArrow3() {
@@ -294,7 +342,6 @@ class StepManager {
 
         arrowLine.style.display = 'block';
         arrowLine.style.markerEnd = 'none';
-
 
 
         gsap.fromTo(
