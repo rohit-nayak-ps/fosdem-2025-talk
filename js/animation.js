@@ -225,10 +225,12 @@ class StepManager {
         lineRdsShard2Horizontal.style.markerEnd = '';
     }
 
+    // rds cluster
     onStep0() {
         this.positionAndAnimateArrow0();
     }
 
+    // Vitess cluster
     onStep1() {
         this.positionStep1Arrows()
         this.dbLinkAll()
@@ -238,6 +240,7 @@ class StepManager {
 
     }
 
+    // Start Migration
     onStep2() {
         this.dataFlowAll()
         document.querySelectorAll('.sidecar-icon').forEach(icon => {
@@ -259,6 +262,7 @@ class StepManager {
         });
     }
 
+    // switch reads
     onStep3() {
         const step3 = document.getElementById('step3-svg');
         const rds = document.querySelector('.rds-cluster');
@@ -267,19 +271,66 @@ class StepManager {
         const offsetY = rdsRect.top - step1Rect.top - 10;
         step3.style.top = offsetY + 'px';
         this.positionAndAnimateArrow3();
+        this.positionAndAnimateArrowVtgateToVks();
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'block';
         rdsLine.style.markerStart = 'none';
     }
 
+    positionAndAnimateArrowVtgateToVks() {
+        const container = document.querySelector('.diagram-container');
+        const vtgate = document.querySelector('.vtgate-block');
+        const vksShard1 = document.querySelector('.vks-shard-1');
+        const vksShard2 = document.querySelector('.vks-shard-2');
+        const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
+        const arrowLine2 = document.getElementById('line-vtgate-vksShard2');
+
+        this.connectElements(vtgate, vksShard1, arrowLine1, container, 0, -60, -50);
+        this.connectElements(vtgate, vksShard2, arrowLine2, container, 0, -40, -50);
+
+        arrowLine1.style.display = 'block';
+        arrowLine2.style.display = 'block';
+        arrowLine1.style.markerEnd = 'none';
+        arrowLine2.style.markerEnd = 'none';
+
+        gsap.fromTo(
+            arrowLine1,
+            {strokeDashoffset: 100},
+            {
+                strokeDashoffset: 1,
+                duration: 5,
+                ease: 'power1.inOut',
+                repeat: -1,
+                yoyo: true
+            }
+        );
+
+        gsap.fromTo(
+            arrowLine2,
+            {strokeDashoffset: 100},
+            {
+                strokeDashoffset: 1,
+                duration: 5,
+                ease: 'power1.inOut',
+                repeat: -1,
+                yoyo: true
+            }
+        );
+    }
+
     offStep3() {
         const lineUserVtgate = document.getElementById('line-user-vtgate');
+        const lineVtgateVksShard1 = document.getElementById('line-vtgate-vksShard1');
+        const lineVtgateVksShard2 = document.getElementById('line-vtgate-vksShard2');
         lineUserVtgate.style.display = 'none';
         lineUserVtgate.style.markerStart = '';
+        lineVtgateVksShard1.style.display = 'none';
+        lineVtgateVksShard2.style.display = 'none';
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.markerStart = 'url(#arrow-reversed)';
     }
 
+    // switch writes
     offStep4() {
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'block';
@@ -314,6 +365,7 @@ class StepManager {
         this.showWorkflows();
     }
 
+    // complete
     onStep5() {
         const rds = document.querySelector('.rds-cluster');
         rds.style.display = 'none';
