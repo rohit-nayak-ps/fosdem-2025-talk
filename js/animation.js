@@ -328,6 +328,10 @@ class StepManager {
         grpcText.style.display = 'block';
         const txt = document.getElementById('mysql-protocol-text')
         txt.style.display = 'none';
+        const step4 = document.getElementById('step4-svg');
+        const offset4Y = rdsRect.top - step1Rect.top - 10;
+        step4.style.top = offset4Y + 'px';
+        this.positionAndAnimateArrowVtgateToRds();
     }
 
     positionAndAnimateArrowVtgateToVks() {
@@ -387,6 +391,8 @@ class StepManager {
         grpcText.style.display = 'none';
         const txt = document.getElementById('mysql-protocol-text')
         txt.style.display = 'block';
+        const arrowLine = document.getElementById('line-vtgate-rds');
+        arrowLine.style.display = 'none';
     }
 
     // switch writes
@@ -400,6 +406,7 @@ class StepManager {
         deniedTables.style.top = '0px';
         const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
         reverseSideCar.style.display = 'none';
+
     }
 
     onStep4() {
@@ -420,7 +427,8 @@ class StepManager {
         document.getElementById('mysql-protocol-text-rds').style.display = 'none';
         const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
         reverseSideCar.style.display = 'block';
-
+        const arrowLine = document.getElementById('line-vtgate-rds');
+        arrowLine.style.display = 'none';
     }
 
     showWorkflows() {
@@ -496,6 +504,41 @@ class StepManager {
         textElement.setAttribute('x', textX);
         textElement.setAttribute('y', textY);
         textElement.style.display = 'block';
+    }
+
+    positionAndAnimateArrowVtgateToRds() {
+        const container = document.querySelector('.diagram-container');
+        const vtgate = document.querySelector('.vtgate-block');
+        const rds = document.querySelector('.rds-cluster');
+        const arrowLine = document.getElementById('line-vtgate-rds');
+
+        const containerRect = container.getBoundingClientRect();
+        const vtgateRect = vtgate.getBoundingClientRect();
+        const rdsRect = rds.getBoundingClientRect();
+
+        const x1 = vtgateRect.left + (vtgateRect.right - vtgateRect.left) / 2;
+        const y1 = vtgateRect.top - 90;
+        const x2 = rdsRect.left - containerRect.left;
+        const y2 = (rdsRect.top + rdsRect.bottom) / 2 - containerRect.top;
+
+        arrowLine.setAttribute('x1', x1);
+        arrowLine.setAttribute('y1', y1);
+        arrowLine.setAttribute('x2', x2);
+        arrowLine.setAttribute('y2', y2);
+
+        arrowLine.style.display = 'block';
+
+        gsap.fromTo(
+            arrowLine,
+            {strokeDashoffset: 100},
+            {
+                strokeDashoffset: 1,
+                duration: 5,
+                ease: 'power1.inOut',
+                repeat: -1,
+                yoyo: true
+            }
+        );
     }
 }
 
