@@ -405,8 +405,6 @@ class StepManager {
     onStep4() {
         const rdsLine = document.getElementById('dynamic-arrow')
         rdsLine.style.display = 'none';
-        const lineUserVtgate = document.getElementById('line-user-vtgate');
-        lineUserVtgate.style.markerEnd = 'url(#arrow)';
         const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
         const arrowLine2 = document.getElementById('line-vtgate-vksShard2');
         arrowLine1.style.markerEnd = 'url(#arrow)';
@@ -480,8 +478,6 @@ class StepManager {
         arrowLine.setAttribute('y2', y2);
 
         arrowLine.style.display = 'block';
-        arrowLine.style.markerEnd = 'none';
-
 
         gsap.fromTo(
             arrowLine,
