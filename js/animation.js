@@ -319,8 +319,7 @@ class StepManager {
         this.positionAndAnimateArrow3();
         this.positionAndAnimateArrowVtgateToVks();
         const rdsLine = document.getElementById('dynamic-arrow')
-        rdsLine.style.display = 'block';
-        rdsLine.style.markerStart = 'none';
+        rdsLine.style.display = 'none';
         this.setRoutingRules(
             ['t1', 't1@primary', 't1@replica', 'eks.t1', 'eks.t1@primary', 'eks.t1@replica','vks.t1', 'vks.t1@primary', 'vks.t1@replica'],
             ['eks.t1', 'eks.t1@primary', 'vks.t1@replica', 'eks.t1', 'eks.t1@primary', 'vks.t1@replica','eks.t1', 'eks.t1@primary', 'vks.t1@replica']
@@ -379,7 +378,7 @@ class StepManager {
         lineVtgateVksShard1.style.display = 'none';
         lineVtgateVksShard2.style.display = 'none';
         const rdsLine = document.getElementById('dynamic-arrow')
-        rdsLine.style.markerStart = 'url(#arrow-reversed)';
+        rdsLine.style.display = 'block';
         const textElement = document.getElementById('mysql-protocol-text-user-vtgate');
         textElement.style.display = 'none';
         const grpcText = document.getElementById('grpc-text');
@@ -389,8 +388,6 @@ class StepManager {
 
     // switch writes
     offStep4() {
-        const rdsLine = document.getElementById('dynamic-arrow')
-        rdsLine.style.display = 'block';
         const arrowLine1 = document.getElementById('line-vtgate-vksShard1');
         const arrowLine2 = document.getElementById('line-vtgate-vksShard2');
         arrowLine1.style.markerEnd = 'none';
