@@ -117,7 +117,6 @@ class StepManager {
     setRoutingRules(fromArray, toArray) {
         const tbody = document.getElementById('routing-rules-body');
         tbody.innerHTML = ''; // Clear existing rows
-
         for (let i = 0; i < fromArray.length; i++) {
             const row = document.createElement('tr');
             const fromCell = document.createElement('td');
@@ -291,8 +290,8 @@ class StepManager {
         lineVksEksReplica.style.markerEnd = 'none';
         document.querySelector('.routing-rules').style.display = 'block';
         this.setRoutingRules(
-            ['t1', 't1@primary', 't1@replica'],
-            ['eks.t1', 'eks.t1', 'eks.t1']
+            ['t1', 't1@primary', 't1@replica', 'eks.t1', 'eks.t1@primary', 'eks.t1@replica','vks.t1', 'vks.t1@primary', 'vks.t1@replica'],
+            ['eks.t1', 'eks.t1@primary', 'eks.t1@replica', 'eks.t1', 'eks.t1@primary', 'eks.t1@replica','eks.t1', 'eks.t1@primary', 'eks.t1@replica']
         );
         document.querySelector('.denied-tables').style.display = 'block';
         document.getElementById('mysql-protocol-text-rds').style.display = 'block';
@@ -323,8 +322,8 @@ class StepManager {
         rdsLine.style.display = 'block';
         rdsLine.style.markerStart = 'none';
         this.setRoutingRules(
-            ['t1', 't1@primary', 't1@replica'],
-            ['eks.t1', 'eks.t1', 'vks.t1']
+            ['t1', 't1@primary', 't1@replica', 'eks.t1', 'eks.t1@primary', 'eks.t1@replica','vks.t1', 'vks.t1@primary', 'vks.t1@replica'],
+            ['eks.t1', 'eks.t1@primary', 'vks.t1@replica', 'eks.t1', 'eks.t1@primary', 'vks.t1@replica','eks.t1', 'eks.t1@primary', 'vks.t1@replica']
         );
         const grpcText = document.getElementById('grpc-text');
         grpcText.style.display = 'block';
@@ -417,8 +416,8 @@ class StepManager {
         arrowLine1.style.markerEnd = 'url(#arrow)';
         arrowLine2.style.markerEnd = 'url(#arrow)';
         this.setRoutingRules(
-            ['t1', 't1@primary', 't1@replica'],
-            ['vks.t1', 'vks.t1', 'vks.t1']
+            ['t1', 't1@primary', 't1@replica', 'eks.t1', 'eks.t1@primary', 'eks.t1@replica','vks.t1', 'vks.t1@primary', 'vks.t1@replica'],
+            ['vks.t1', 'vks.t1@primary', 'vks.t1@replica', 'vks.t1', 'vks.t1@primary', 'vks.t1@replica','vks.t1', 'vks.t1@primary', 'vks.t1@replica']
         );
         const deniedTables = document.querySelector('.denied-tables');
         deniedTables.style.right = '80px';

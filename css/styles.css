@@ -106,15 +106,16 @@ body {
     color: white;
 }
 
-.table-grid th, .table-grid td {
-    border: 0.5px dotted white;
+.table-grid th {
+    border: 1px dotted white;
 }
 
 .table-grid td {
     padding-left: 3px;
     padding-right: 3px;
+    border: 1px dotted white;
 }
 
-.denied-tables th, .table-grid td{
+.denied-tables th,  .denied-tables td{
     border: 0;
 }
