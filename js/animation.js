@@ -400,10 +400,6 @@ class StepManager {
         deniedTables.style.top = '0px';
         const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
         reverseSideCar.style.display = 'none';
-        const sidecars = document.querySelectorAll('.sidecar-icon');
-        sidecars.forEach(sidecar => {
-            sidecar.style.display = 'block';
-        });
     }
 
     onStep4() {
@@ -426,10 +422,6 @@ class StepManager {
         document.getElementById('mysql-protocol-text-rds').style.display = 'none';
         const reverseSideCar = document.querySelector('.reverse-sidecar-icon');
         reverseSideCar.style.display = 'block';
-        const sidecars = document.querySelectorAll('.sidecar-icon');
-        sidecars.forEach(sidecar => {
-            sidecar.style.display = 'none';
-        });
 
     }
 
@@ -460,6 +452,11 @@ class StepManager {
         this.hideWorkflows();
         document.querySelector('.denied-tables').style.display = 'none';
         document.querySelector('.routing-rules').style.display = 'none';
+        const sidecars = document.querySelectorAll('.sidecar-icon');
+        sidecars.forEach(sidecar => {
+            sidecar.style.display = 'none';
+        });
+
     }
 
     positionAndAnimateArrow3() {
