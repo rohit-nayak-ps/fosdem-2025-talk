@@ -326,6 +326,8 @@ class StepManager {
         );
         const grpcText = document.getElementById('grpc-text');
         grpcText.style.display = 'block';
+        const txt = document.getElementById('mysql-protocol-text')
+        txt.style.display = 'none';
     }
 
     positionAndAnimateArrowVtgateToVks() {
@@ -383,7 +385,8 @@ class StepManager {
         textElement.style.display = 'none';
         const grpcText = document.getElementById('grpc-text');
         grpcText.style.display = 'none';
-
+        const txt = document.getElementById('mysql-protocol-text')
+        txt.style.display = 'block';
     }
 
     // switch writes
