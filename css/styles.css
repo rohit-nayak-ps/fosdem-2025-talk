@@ -85,8 +85,18 @@ body {
     box-shadow: 0 0 10px 2px rgba(255, 255, 255, 1); /* Add a subtle shadow */
 }
 
+@keyframes blink {
+    0%, 100% {
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 1);
+    }
+    50% {
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+    }
+}
+
 .current-step {
-    border: 2px inset orangered; /* Gold border to highlight the current step */
+    border: 2px inset orangered;
+    animation: blink 3s infinite;
 }
 
 .step-block {
