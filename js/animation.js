@@ -295,6 +295,7 @@ class StepManager {
         );
         document.querySelector('.denied-tables').style.display = 'block';
         document.getElementById('mysql-protocol-text-rds').style.display = 'block';
+        document.getElementById('vevents-text').style.display = 'block';
 
     }
 
@@ -310,6 +311,8 @@ class StepManager {
         for (let i = 0; i < extLines.length; i++) {
             extLines[i].style.stroke = 'white';
         }
+        document.getElementById('vevents-text').style.display = 'none';
+
     }
 
     // switch reads
