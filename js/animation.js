@@ -309,7 +309,7 @@ class StepManager {
         });
         const extLines = document.querySelectorAll('.ext-lines');
         for (let i = 0; i < extLines.length; i++) {
-            extLines[i].style.stroke = 'white';
+            extLines[i].style.stroke = '#333';
         }
         document.getElementById('vevents-text').style.display = 'none';
 
