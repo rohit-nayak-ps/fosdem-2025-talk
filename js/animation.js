@@ -306,6 +306,10 @@ class StepManager {
         document.querySelectorAll('.sidecar-icon').forEach(icon => {
             icon.style.display = 'none';
         });
+        const extLines = document.querySelectorAll('.ext-lines');
+        for (let i = 0; i < extLines.length; i++) {
+            extLines[i].style.stroke = 'white';
+        }
     }
 
     // switch reads
@@ -332,6 +336,11 @@ class StepManager {
         const offset4Y = rdsRect.top - step1Rect.top - 10;
         step4.style.top = offset4Y + 'px';
         this.positionAndAnimateArrowVtgateToRds();
+        const extLines = document.querySelectorAll('.ext-lines');
+        for (let i = 0; i < extLines.length; i++) {
+            extLines[i].style.stroke = 'cyan';
+        }
+
     }
 
     positionAndAnimateArrowVtgateToVks() {
@@ -509,17 +518,17 @@ class StepManager {
     positionAndAnimateArrowVtgateToRds() {
         const container = document.querySelector('.diagram-container');
         const vtgate = document.querySelector('.vtgate-block');
-        const rds = document.querySelector('.rds-cluster');
+        const eks = document.querySelector('.eks-shard-0-primary');
         const arrowLine = document.getElementById('line-vtgate-rds');
 
         const containerRect = container.getBoundingClientRect();
         const vtgateRect = vtgate.getBoundingClientRect();
-        const rdsRect = rds.getBoundingClientRect();
+        const eksRect = eks.getBoundingClientRect();
 
-        const x1 = vtgateRect.left + (vtgateRect.right - vtgateRect.left) / 2;
-        const y1 = vtgateRect.top - 90;
-        const x2 = rdsRect.left - containerRect.left;
-        const y2 = (rdsRect.top + rdsRect.bottom) / 2 - containerRect.top;
+        const x1 = vtgateRect.right;
+        const y1 = (vtgateRect.top + vtgateRect.bottom) / 2 - 2 * containerRect.top;
+        const x2 = eksRect.left - containerRect.left;
+        const y2 = (eksRect.top + eksRect.bottom) / 2 - containerRect.top;
 
         arrowLine.setAttribute('x1', x1);
         arrowLine.setAttribute('y1', y1);
